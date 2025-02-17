@@ -11,7 +11,7 @@ const backgroundVariants = {
     transition: {
       duration: 20,
       repeat: Infinity,
-      repeatType: "reverse",
+      repeatType: "reverse" as const,
       ease: "linear",
     },
   },
