@@ -1,0 +1,42 @@
+Create a modern, responsive website for an AI agency using HTML, CSS, and JavaScript. The site should include the following functions:
+
+- **Homepage & Landing Area:**
+  - A dynamic hero section with captivating visuals or animations.
+  - A clear value proposition and tagline.
+  - Prominent call-to-action (CTA) buttons (e.g., "Request a Demo", "Learn More").
+
+- **Interactive Demonstrations:**
+  - A section with live AI demo simulations or interactive infographics.
+  - Real-time data visualizations to showcase AI capabilities.
+
+- **Services & Solutions:**
+  - Detailed descriptions of AI services (machine learning, predictive analytics, computer vision, etc.).
+  - Use cases and case studies that illustrate real-world applications.
+  - Filters or navigation aids to help visitors find industry-specific information.
+
+- **Content Management:**
+  - A blog or news section for thought leadership articles and updates.
+  - Downloadable resources such as whitepapers and e-books.
+  - An easy-to-manage content system that can be updated regularly.
+
+- **User Engagement & Support:**
+  - An integrated chatbot for instant Q&A and demo scheduling.
+  - Contact forms and a newsletter sign-up section.
+  - A comprehensive FAQ section to address common queries.
+
+- **Analytics & Optimization:**
+  - Integration with analytics tools (e.g., Google Analytics) to track user behavior.
+  - Built-in A/B testing functionalities for optimizing CTAs and layouts.
+  - A performance dashboard to monitor key metrics.
+
+- **Security & Compliance:**
+  - SSL encryption for secure data transmission.
+  - Clear privacy policies and cookie management features.
+  - Regular security measures to protect user data.
+
+- **Mobile & Accessibility:**
+  - Fully responsive design that works seamlessly on desktops, tablets, and smartphones.
+  - Optimized load times and intuitive navigation.
+  - Accessibility features such as keyboard navigation and proper alt text for images.
+
+Ensure the site has a clean, modern aesthetic that aligns with cutting-edge technology trends (think sleek like Tesla’s interface). Also, please include comments in the code for clarity and maintainability.
