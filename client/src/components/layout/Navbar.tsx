@@ -23,8 +23,8 @@ export default function Navbar() {
               <NavigationMenuTrigger>Services</NavigationMenuTrigger>
               <NavigationMenuContent>
                 <div className="grid gap-3 p-6 w-[400px]">
-                  <NavigationMenuLink href="/services#ghl">
-                    GHL Integration
+                  <NavigationMenuLink href="/services#automation">
+                    Business Automation
                   </NavigationMenuLink>
                   <NavigationMenuLink href="/services#web">
                     Web Design & Hosting
@@ -34,6 +34,11 @@ export default function Navbar() {
                   </NavigationMenuLink>
                 </div>
               </NavigationMenuContent>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Link href="/pricing">
+                <a className="px-4 py-2">Pricing</a>
+              </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <Link href="/blog">
