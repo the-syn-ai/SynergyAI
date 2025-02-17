@@ -1,22 +1,37 @@
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Brain, Eye, LineChart } from "lucide-react";
+import { Globe, Box, Mail, Phone, MessageSquare, Star } from "lucide-react";
 
 const features = [
   {
-    icon: Brain,
-    title: "Machine Learning",
-    description: "Custom AI models trained on your data for precise predictions and insights."
+    icon: Box,
+    title: "GHL Integration",
+    description: "Complete GoHighLevel setup and integration for your business automation needs."
   },
   {
-    icon: Eye,
-    title: "Computer Vision",
-    description: "Advanced image and video analysis for automated visual understanding."
+    icon: Globe,
+    title: "Web Design & Hosting",
+    description: "Professional web design and reliable hosting solutions for your online presence."
   },
   {
-    icon: LineChart,
-    title: "Predictive Analytics",
-    description: "Data-driven forecasting to optimize business decisions."
+    icon: Mail,
+    title: "Email Automation",
+    description: "Automated email marketing campaigns and customer engagement sequences."
+  },
+  {
+    icon: Phone,
+    title: "AI Call Bot",
+    description: "Intelligent call handling and automated appointment scheduling."
+  },
+  {
+    icon: MessageSquare,
+    title: "CRM Solutions",
+    description: "Custom CRM build and automation to streamline your customer relationships."
+  },
+  {
+    icon: Star,
+    title: "AI Review Management",
+    description: "Automated review collection and response system powered by AI."
   }
 ];
 
@@ -27,11 +42,11 @@ export default function Features() {
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold mb-4">Our Services</h2>
           <p className="text-lg text-muted-foreground">
-            Cutting-edge AI solutions for modern businesses
+            Comprehensive AI-powered solutions for modern businesses
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((feature, index) => (
             <motion.div
               key={index}

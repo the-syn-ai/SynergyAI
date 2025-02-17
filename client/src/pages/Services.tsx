@@ -3,22 +3,70 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const services = [
   {
-    id: "ml",
-    title: "Machine Learning",
-    description: "Custom AI models trained on your data for precise predictions and insights.",
-    image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d"
+    id: "ghl",
+    title: "GHL Integration & Setup",
+    description: `Complete GoHighLevel platform integration and setup, including:
+    • Custom workflow automation
+    • Sales funnel creation
+    • Appointment scheduling
+    • Lead capture forms
+    • Marketing automation`,
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f"
   },
   {
-    id: "vision",
-    title: "Computer Vision",
-    description: "Advanced image and video analysis for automated visual understanding.",
-    image: "https://images.unsplash.com/photo-1487017159836-4e23ece2e4cf"
+    id: "web",
+    title: "Web Design & Hosting",
+    description: `Professional web design and hosting solutions:
+    • Responsive website design
+    • Custom development
+    • SEO optimization
+    • Secure hosting
+    • Performance optimization`,
+    image: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8"
   },
   {
-    id: "analytics",
-    title: "Predictive Analytics",
-    description: "Data-driven forecasting to optimize business decisions.",
-    image: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853"
+    id: "crm",
+    title: "CRM Solutions",
+    description: `Custom CRM development and automation:
+    • Contact management
+    • Lead tracking
+    • Sales pipeline automation
+    • Customer segmentation
+    • Performance analytics`,
+    image: "https://images.unsplash.com/photo-1552664730-d307ca884978"
+  },
+  {
+    id: "email",
+    title: "Email Automation",
+    description: `Comprehensive email marketing automation:
+    • Campaign creation
+    • Audience segmentation
+    • A/B testing
+    • Performance tracking
+    • Template design`,
+    image: "https://images.unsplash.com/photo-1563986768494-4dee2763ff3f"
+  },
+  {
+    id: "calls",
+    title: "AI Call Bot",
+    description: `Intelligent call handling system:
+    • Automated appointment scheduling
+    • Call routing
+    • Voice recognition
+    • Call transcription
+    • Integration with CRM`,
+    image: "https://images.unsplash.com/photo-1549050144-88ec4d9d1859"
+  },
+  {
+    id: "reviews",
+    title: "AI Review Management",
+    description: `Automated review management system:
+    • Review collection
+    • AI-powered responses
+    • Sentiment analysis
+    • Performance tracking
+    • Review integration`,
+    image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40"
   }
 ];
 
@@ -26,7 +74,7 @@ export default function Services() {
   return (
     <div className="container mx-auto px-4 py-20">
       <h1 className="text-4xl font-bold mb-12">Our Services</h1>
-      
+
       <div className="space-y-20">
         {services.map((service, index) => (
           <motion.div
@@ -45,14 +93,14 @@ export default function Services() {
                 className="rounded-lg object-cover w-full aspect-video"
               />
             </div>
-            
+
             <div>
               <Card>
                 <CardHeader>
                   <CardTitle className="text-2xl">{service.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-lg text-muted-foreground">
+                  <p className="text-lg text-muted-foreground whitespace-pre-line">
                     {service.description}
                   </p>
                 </CardContent>
