@@ -12,14 +12,14 @@ export default function Hero() {
             transition={{ duration: 0.6 }}
           >
             <h1 className="text-5xl font-bold leading-tight mb-6">
-              Transform Your Business with AI Solutions
+              Power Your Business with SynergyAI Solutions
             </h1>
             <p className="text-xl text-muted-foreground mb-8">
-              Harness the power of artificial intelligence to drive innovation and growth
+              Complete business automation with GoHighLevel integration and AI-powered tools
             </p>
             <div className="space-x-4">
-              <Button size="lg">Request Demo</Button>
-              <Button size="lg" variant="outline">Learn More</Button>
+              <Button size="lg">Get Started</Button>
+              <Button size="lg" variant="outline">View Services</Button>
             </div>
           </motion.div>
 
@@ -30,8 +30,8 @@ export default function Hero() {
             className="relative aspect-video"
           >
             <img
-              src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b"
-              alt="AI Technology"
+              src="https://images.unsplash.com/photo-1460925895917-afdab827c52f"
+              alt="Business Automation"
               className="rounded-lg object-cover w-full h-full"
             />
           </motion.div>

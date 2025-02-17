@@ -14,7 +14,7 @@ export default function Navbar() {
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm border-b">
       <nav className="container mx-auto px-4 h-16 flex items-center justify-between">
         <Link href="/">
-          <a className="text-2xl font-bold">AI Agency</a>
+          <a className="text-2xl font-bold">SynergyAI</a>
         </Link>
 
         <NavigationMenu>
@@ -23,14 +23,14 @@ export default function Navbar() {
               <NavigationMenuTrigger>Services</NavigationMenuTrigger>
               <NavigationMenuContent>
                 <div className="grid gap-3 p-6 w-[400px]">
-                  <NavigationMenuLink href="/services#ml">
-                    Machine Learning
+                  <NavigationMenuLink href="/services#ghl">
+                    GHL Integration
                   </NavigationMenuLink>
-                  <NavigationMenuLink href="/services#vision">
-                    Computer Vision
+                  <NavigationMenuLink href="/services#web">
+                    Web Design & Hosting
                   </NavigationMenuLink>
-                  <NavigationMenuLink href="/services#analytics">
-                    Predictive Analytics
+                  <NavigationMenuLink href="/services#crm">
+                    CRM Solutions
                   </NavigationMenuLink>
                 </div>
               </NavigationMenuContent>
