@@ -74,9 +74,16 @@ export default function Navbar() {
           </NavigationMenuList>
         </NavigationMenu>
 
-        <Link href="/contact">
-          <Button>Get Started</Button>
-        </Link>
+        <div className="flex items-center gap-4">
+          <Link href="https://cal.com/synai-automations-i329dt/intro-call" target="_blank">
+            <Button variant="outline" className="font-semibold">
+              Let's Talk
+            </Button>
+          </Link>
+          <Link href="/contact">
+            <Button>Get Started</Button>
+          </Link>
+        </div>
       </nav>
     </header>
   );
