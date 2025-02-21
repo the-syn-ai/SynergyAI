@@ -75,11 +75,15 @@ export default function Navbar() {
         </NavigationMenu>
 
         <div className="flex items-center gap-4">
-          <Link href="https://cal.com/synai-automations-i329dt/intro-call" target="_blank">
+          <a 
+            href="https://cal.com/synai-automations-i329dt/intro-call" 
+            target="_blank" 
+            rel="noopener noreferrer"
+          >
             <Button variant="outline" className="font-semibold">
               Let's Talk
             </Button>
-          </Link>
+          </a>
           <Link href="/contact">
             <Button>Get Started</Button>
           </Link>
