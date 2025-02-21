@@ -80,7 +80,10 @@ export default function Navbar() {
             target="_blank" 
             rel="noopener noreferrer"
           >
-            <Button variant="outline" className="font-semibold">
+            <Button 
+              variant="outline" 
+              className="font-semibold transition-all duration-300 hover:scale-105 hover:shadow-[0_0_15px_rgba(var(--primary-rgb),0.5)] hover:border-primary/50"
+            >
               Let's Talk
             </Button>
           </a>
