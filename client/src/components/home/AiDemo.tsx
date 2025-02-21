@@ -4,8 +4,56 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Brain, MessageSquare, ImageIcon } from "lucide-react";
+import { Brain, MessageSquare, ImageIcon, Globe } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+// Language configurations
+const languages = [
+  { code: "en", name: "English" },
+  { code: "es", name: "Español" },
+  { code: "fr", name: "Français" },
+  { code: "de", name: "Deutsch" },
+  { code: "zh", name: "中文" },
+];
+
+const translations = {
+  en: {
+    title: "Experience AI in Action",
+    subtitle: "Try our AI capabilities firsthand with these interactive demos",
+    sentimentTab: "Sentiment Analysis",
+    chatTab: "AI Chat",
+    visionTab: "Vision AI",
+    sentimentTitle: "Sentiment Analysis Demo",
+    sentimentPlaceholder: "Enter some text to analyze...",
+    chatPlaceholder: "Type your message...",
+    imagePlaceholder: "Enter an image URL...",
+    analyzeButton: "Analyze",
+    analyzing: "Analyzing...",
+    sendButton: "Send",
+  },
+  es: {
+    title: "Experimenta la IA en Acción",
+    subtitle: "Prueba nuestras capacidades de IA de primera mano con estas demostraciones interactivas",
+    sentimentTab: "Análisis de Sentimientos",
+    chatTab: "Chat con IA",
+    visionTab: "Visión IA",
+    sentimentTitle: "Demo de Análisis de Sentimientos",
+    sentimentPlaceholder: "Ingresa un texto para analizar...",
+    chatPlaceholder: "Escribe tu mensaje...",
+    imagePlaceholder: "Ingresa una URL de imagen...",
+    analyzeButton: "Analizar",
+    analyzing: "Analizando...",
+    sendButton: "Enviar",
+  },
+  // Add other languages as needed
+};
 
 export default function AiDemo() {
   const { toast } = useToast();
@@ -16,6 +64,9 @@ export default function AiDemo() {
   const [chatHistory, setChatHistory] = useState<Array<{ text: string; isBot: boolean }>>([]);
   const [imageUrl, setImageUrl] = useState("");
   const [imageAnalysis, setImageAnalysis] = useState("");
+  const [language, setLanguage] = useState("en");
+
+  const t = translations[language as keyof typeof translations] || translations.en;
 
   const handleDemo = async () => {
     if (!input.trim()) return;
@@ -27,7 +78,7 @@ export default function AiDemo() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ text: input })
+        body: JSON.stringify({ text: input, language })
       });
 
       if (!res.ok) {
@@ -60,7 +111,7 @@ export default function AiDemo() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ message: chatInput })
+        body: JSON.stringify({ message: chatInput, language })
       });
 
       if (!res.ok) {
@@ -90,7 +141,7 @@ export default function AiDemo() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ image: imageUrl })
+        body: JSON.stringify({ image: imageUrl, language })
       });
 
       if (!res.ok) {
@@ -120,9 +171,24 @@ export default function AiDemo() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl font-bold mb-4">Experience AI in Action</h2>
+          <div className="flex justify-center items-center gap-4 mb-4">
+            <h2 className="text-3xl font-bold">{t.title}</h2>
+            <Select value={language} onValueChange={setLanguage}>
+              <SelectTrigger className="w-[180px]">
+                <Globe className="w-4 h-4 mr-2" />
+                <SelectValue placeholder="Select language" />
+              </SelectTrigger>
+              <SelectContent>
+                {languages.map((lang) => (
+                  <SelectItem key={lang.code} value={lang.code}>
+                    {lang.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Try our AI capabilities firsthand with these interactive demos
+            {t.subtitle}
           </p>
         </motion.div>
 
@@ -131,28 +197,28 @@ export default function AiDemo() {
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="sentiment" className="flex items-center gap-2">
                 <Brain className="w-4 h-4" />
-                Sentiment Analysis
+                {t.sentimentTab}
               </TabsTrigger>
               <TabsTrigger value="chat" className="flex items-center gap-2">
                 <MessageSquare className="w-4 h-4" />
-                AI Chat
+                {t.chatTab}
               </TabsTrigger>
               <TabsTrigger value="vision" className="flex items-center gap-2">
                 <ImageIcon className="w-4 h-4" />
-                Vision AI
+                {t.visionTab}
               </TabsTrigger>
             </TabsList>
 
             <TabsContent value="sentiment">
               <Card>
                 <CardHeader>
-                  <CardTitle>Sentiment Analysis Demo</CardTitle>
+                  <CardTitle>{t.sentimentTitle}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
                     <div className="flex gap-2">
                       <Input
-                        placeholder="Enter some text to analyze..."
+                        placeholder={t.sentimentPlaceholder}
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                         onKeyPress={(e) => e.key === 'Enter' && handleDemo()}
@@ -161,7 +227,7 @@ export default function AiDemo() {
                         onClick={handleDemo}
                         disabled={isProcessing || !input.trim()}
                       >
-                        {isProcessing ? "Analyzing..." : "Analyze"}
+                        {isProcessing ? t.analyzing : t.analyzeButton}
                       </Button>
                     </div>
 
@@ -185,7 +251,7 @@ export default function AiDemo() {
             <TabsContent value="chat">
               <Card>
                 <CardHeader>
-                  <CardTitle>AI Chat Demo</CardTitle>
+                  <CardTitle>{t.chatTab}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
@@ -212,7 +278,7 @@ export default function AiDemo() {
 
                     <div className="flex gap-2">
                       <Input
-                        placeholder="Type your message..."
+                        placeholder={t.chatPlaceholder}
                         value={chatInput}
                         onChange={(e) => setChatInput(e.target.value)}
                         onKeyPress={(e) => e.key === 'Enter' && handleChat()}
@@ -221,7 +287,7 @@ export default function AiDemo() {
                         onClick={handleChat}
                         disabled={isProcessing || !chatInput.trim()}
                       >
-                        Send
+                        {t.sendButton}
                       </Button>
                     </div>
                   </div>
@@ -232,13 +298,13 @@ export default function AiDemo() {
             <TabsContent value="vision">
               <Card>
                 <CardHeader>
-                  <CardTitle>Vision AI Demo</CardTitle>
+                  <CardTitle>{t.visionTab}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
                     <div className="flex gap-2">
                       <Input
-                        placeholder="Enter an image URL..."
+                        placeholder={t.imagePlaceholder}
                         value={imageUrl}
                         onChange={(e) => setImageUrl(e.target.value)}
                         onKeyPress={(e) => e.key === 'Enter' && handleImageAnalysis()}
@@ -247,7 +313,7 @@ export default function AiDemo() {
                         onClick={handleImageAnalysis}
                         disabled={isProcessing || !imageUrl.trim()}
                       >
-                        {isProcessing ? "Analyzing..." : "Analyze"}
+                        {isProcessing ? t.analyzing : t.analyzeButton}
                       </Button>
                     </div>
 
