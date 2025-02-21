@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
 import { Link } from "wouter";
+import { LetsTalkButton } from "@/components/common/LetsTalkButton";
 
 const plans = [
   {
@@ -111,7 +112,7 @@ export default function Pricing() {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20"
       >
         {plans.map((plan) => (
           <motion.div
@@ -144,6 +145,21 @@ export default function Pricing() {
             </Card>
           </motion.div>
         ))}
+      </motion.div>
+
+      {/* Let's Talk section */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true }}
+        className="text-center mt-20"
+      >
+        <h2 className="text-2xl font-semibold mb-4">Need a Custom Solution?</h2>
+        <p className="text-lg text-muted-foreground mb-8">
+          Let's discuss how we can tailor our services to your specific needs
+        </p>
+        <LetsTalkButton />
       </motion.div>
     </div>
   );

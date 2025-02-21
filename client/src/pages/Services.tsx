@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { LetsTalkButton } from "@/components/common/LetsTalkButton";
 
 const services = [
   {
@@ -109,6 +110,21 @@ export default function Services() {
           </motion.div>
         ))}
       </div>
+
+      {/* Let's Talk section */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true }}
+        className="text-center mt-20"
+      >
+        <h2 className="text-2xl font-semibold mb-4">Ready to Transform Your Business?</h2>
+        <p className="text-lg text-muted-foreground mb-8">
+          Schedule a free consultation to discuss how we can help automate your business
+        </p>
+        <LetsTalkButton />
+      </motion.div>
     </div>
   );
 }

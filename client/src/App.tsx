@@ -10,7 +10,6 @@ import Services from "@/pages/Services";
 import Contact from "@/pages/Contact";
 import Pricing from "@/pages/Pricing";
 import Dashboard from "@/pages/admin/Dashboard";
-import Calendar from "@/pages/admin/Calendar";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -21,7 +20,6 @@ function Router() {
       <Route path="/services" component={Services} />
       <Route path="/pricing" component={Pricing} />
       <Route path="/contact" component={Contact} />
-      <Route path="/calendar" component={Calendar} />
       <Route path="/admin/dashboard" component={Dashboard} />
       <Route component={NotFound} />
     </Switch>
@@ -37,6 +35,9 @@ function App() {
           <Router />
         </main>
         <Footer />
+        <button className="fixed bottom-4 right-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded animate-bounce">
+          Let's Talk
+        </button>
       </div>
       <Toaster />
     </QueryClientProvider>
