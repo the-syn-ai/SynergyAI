@@ -8,6 +8,7 @@ import {
   PlayCircle,
   LineChart,
   MessageSquare,
+  Calendar,
   Menu,
   X
 } from "lucide-react";
@@ -17,6 +18,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 const navigation = [
   { name: "Analytics", href: "/admin/dashboard", icon: BarChart3 },
+  { name: "Calendar", href: "/admin/calendar", icon: Calendar },
   { name: "Security", href: "/admin/security", icon: Shield },
   { name: "Feature Tour", href: "/admin/tour", icon: Lightbulb },
   { name: "AI Demos", href: "/admin/demos", icon: PlayCircle },

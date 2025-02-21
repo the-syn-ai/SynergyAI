@@ -10,6 +10,7 @@ import Services from "@/pages/Services";
 import Contact from "@/pages/Contact";
 import Pricing from "@/pages/Pricing";
 import Dashboard from "@/pages/admin/Dashboard";
+import Calendar from "@/pages/admin/Calendar";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -21,6 +22,7 @@ function Router() {
       <Route path="/pricing" component={Pricing} />
       <Route path="/contact" component={Contact} />
       <Route path="/admin/dashboard" component={Dashboard} />
+      <Route path="/admin/calendar" component={Calendar} />
       <Route component={NotFound} />
     </Switch>
   );
