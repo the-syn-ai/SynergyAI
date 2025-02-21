@@ -64,6 +64,75 @@ export async function registerRoutes(app: Express) {
     }
   });
 
+  app.post("/api/chat", async (req, res) => {
+    try {
+      const { message } = req.body;
+
+      if (!message) {
+        return res.status(400).json({ error: "Message is required" });
+      }
+
+      const response = await openai.chat.completions.create({
+        model: "gpt-4o",
+        messages: [
+          {
+            role: "system",
+            content: "You are a helpful AI assistant for a business automation company. Provide concise, professional responses focused on helping clients understand our services and capabilities."
+          },
+          {
+            role: "user",
+            content: message
+          }
+        ],
+        max_tokens: 150
+      });
+
+      const reply = response.choices[0].message.content;
+      res.json({ reply });
+    } catch (error) {
+      console.error('OpenAI API Error:', error);
+      res.status(500).json({ error: "Failed to process chat message" });
+    }
+  });
+
+  app.post("/api/analyze-image", async (req, res) => {
+    try {
+      const { image } = req.body;
+
+      if (!image) {
+        return res.status(400).json({ error: "Image URL is required" });
+      }
+
+      const response = await openai.chat.completions.create({
+        model: "gpt-4o",
+        messages: [
+          {
+            role: "user",
+            content: [
+              {
+                type: "text",
+                text: "Analyze this image and describe what you see. Focus on key elements and any relevant business context."
+              },
+              {
+                type: "image_url",
+                image_url: {
+                  url: image
+                }
+              }
+            ],
+          },
+        ],
+        max_tokens: 150
+      });
+
+      const analysis = response.choices[0].message.content;
+      res.json({ analysis });
+    } catch (error) {
+      console.error('OpenAI API Error:', error);
+      res.status(500).json({ error: "Failed to analyze image" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
