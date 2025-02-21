@@ -12,6 +12,9 @@ import {
 
 const app = express();
 
+// Trust proxy - required for Replit's environment
+app.set('trust proxy', 1);
+
 // Security middleware
 app.use(securityHeaders);
 app.use(rateLimiter);
