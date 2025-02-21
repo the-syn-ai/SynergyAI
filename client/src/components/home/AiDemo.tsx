@@ -5,41 +5,42 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Brain, MessageSquare, ImageIcon } from "lucide-react";
-
-const demoResponses = {
-  sentiment: {
-    positive: "This text appears to be positive! 😊",
-    negative: "This text appears to be negative. 😔",
-    neutral: "This text appears to be neutral. 😐"
-  },
-  classification: {
-    business: "Business-related content",
-    technical: "Technical content",
-    casual: "Casual conversation"
-  }
-};
+import { useToast } from "@/hooks/use-toast";
 
 export default function AiDemo() {
+  const { toast } = useToast();
   const [input, setInput] = useState("");
   const [response, setResponse] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
 
   const handleDemo = async () => {
     if (!input.trim()) return;
-    
+
     setIsProcessing(true);
-    // Simulate AI processing
-    setTimeout(() => {
-      // Simple demo logic - will be replaced with real AI
-      if (input.includes("great") || input.includes("good") || input.includes("happy")) {
-        setResponse(demoResponses.sentiment.positive);
-      } else if (input.includes("bad") || input.includes("sad") || input.includes("angry")) {
-        setResponse(demoResponses.sentiment.negative);
-      } else {
-        setResponse(demoResponses.sentiment.neutral);
+    try {
+      const res = await fetch('/api/analyze-sentiment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ text: input })
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to analyze text');
       }
+
+      const data = await res.json();
+      setResponse(data.analysis);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to analyze text. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
       setIsProcessing(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -93,10 +94,10 @@ export default function AiDemo() {
                         onClick={handleDemo}
                         disabled={isProcessing || !input.trim()}
                       >
-                        Analyze
+                        {isProcessing ? "Analyzing..." : "Analyze"}
                       </Button>
                     </div>
-                    
+
                     <AnimatePresence mode="wait">
                       {response && (
                         <motion.div
