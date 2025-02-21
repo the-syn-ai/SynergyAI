@@ -1,12 +1,17 @@
 import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Globe, Box, Mail, Phone, MessageSquare, Star } from "lucide-react";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const features = [
   {
     icon: Box,
-    title: "GHL Integration",
-    description: "Seamlessly integrate GoHighLevel to revolutionize your business operations. Our setup includes custom workflow automation, conversion-optimized funnels, and intelligent appointment scheduling systems.",
+    title: "Business Process Automation",
+    description: "Seamlessly automate your business operations with our cutting-edge solutions. Our setup includes custom workflow automation, conversion-optimized funnels, and intelligent appointment scheduling systems.",
     details: "Perfect for businesses looking to automate their marketing and sales processes."
   },
   {
@@ -41,44 +46,39 @@ const features = [
   }
 ];
 
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.1
-    }
-  }
-};
-
-const cardVariants = {
-  hidden: { 
-    opacity: 0,
-    y: 20,
-    scale: 0.95
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: {
-      type: "spring",
-      damping: 20,
-      stiffness: 100
-    }
-  },
-  hover: {
-    scale: 1.02,
-    transition: {
-      type: "spring",
-      damping: 10,
-      stiffness: 100
-    }
-  }
-};
-
 export default function Features() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    if (!sectionRef.current) return;
+
+    const cards = cardsRef.current.filter(Boolean);
+
+    // GSAP animations for cards
+    cards.forEach((card, index) => {
+      gsap.from(card, {
+        scrollTrigger: {
+          trigger: card,
+          start: "top bottom-=100",
+          toggleActions: "play none none reverse"
+        },
+        opacity: 0,
+        y: 50,
+        rotation: -5,
+        duration: 0.8,
+        ease: "power2.out",
+        delay: index * 0.1
+      });
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+    };
+  }, []);
+
   return (
-    <section className="py-20 bg-gradient-to-b from-background to-muted/50">
+    <section ref={sectionRef} className="py-20 bg-gradient-to-b from-background to-muted/50">
       <div className="container mx-auto px-4">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -93,21 +93,14 @@ export default function Features() {
           </p>
         </motion.div>
 
-        <motion.div 
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-        >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((feature, index) => (
-            <motion.div
+            <div
               key={index}
-              variants={cardVariants}
-              whileHover="hover"
+              ref={el => cardsRef.current[index] = el}
               className="h-full"
             >
-              <Card className="h-full backdrop-blur-sm bg-card/80 border-primary/10 hover:border-primary/20 transition-colors">
+              <Card className="h-full backdrop-blur-sm bg-card/80 border-primary/10 hover:border-primary/20 transition-all duration-300 hover:scale-105">
                 <CardHeader>
                   <motion.div
                     whileHover={{ scale: 1.1, rotate: 5 }}
@@ -122,9 +115,9 @@ export default function Features() {
                   <p className="text-sm text-primary/80">{feature.details}</p>
                 </CardContent>
               </Card>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

@@ -1,6 +1,11 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const backgroundVariants = {
   initial: {
@@ -30,8 +35,43 @@ const textVariants = {
 };
 
 export default function Hero() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const imageRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!sectionRef.current || !headingRef.current || !imageRef.current) return;
+
+    // GSAP animations
+    const timeline = gsap.timeline({
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: "top center",
+        end: "bottom center",
+        scrub: 1,
+      },
+    });
+
+    timeline
+      .from(headingRef.current, {
+        scale: 0.9,
+        opacity: 0.5,
+        duration: 1,
+      })
+      .from(imageRef.current, {
+        x: 100,
+        opacity: 0,
+        duration: 1,
+      }, "-=0.5");
+
+    return () => {
+      timeline.kill();
+    };
+  }, []);
+
   return (
     <motion.section
+      ref={sectionRef}
       className="min-h-screen pt-16 flex items-center relative overflow-hidden"
       initial="initial"
       animate="animate"
@@ -55,6 +95,7 @@ export default function Hero() {
             }}
           >
             <motion.h1 
+              ref={headingRef}
               variants={textVariants}
               className="text-5xl font-bold leading-tight mb-6"
             >
@@ -67,7 +108,7 @@ export default function Hero() {
               className="text-xl text-muted-foreground mb-8"
             >
               Experience the future of business automation with our comprehensive 
-              GoHighLevel integration and AI-powered tools. Transform your operations 
+              integration and AI-powered tools. Transform your operations 
               today.
             </motion.p>
 
@@ -76,12 +117,19 @@ export default function Hero() {
               className="space-x-4"
             >
               <Link href="/contact">
-                <Button size="lg" className="bg-primary hover:bg-primary/90">
+                <Button 
+                  size="lg" 
+                  className="bg-primary hover:bg-primary/90 transform transition-transform hover:scale-105"
+                >
                   Get Started
                 </Button>
               </Link>
               <Link href="/services">
-                <Button size="lg" variant="outline">
+                <Button 
+                  size="lg" 
+                  variant="outline"
+                  className="transform transition-transform hover:scale-105"
+                >
                   View Services
                 </Button>
               </Link>
@@ -89,6 +137,7 @@ export default function Hero() {
           </motion.div>
 
           <motion.div
+            ref={imageRef}
             initial={{ opacity: 0, scale: 0.9, rotate: -5 }}
             animate={{ opacity: 1, scale: 1, rotate: 0 }}
             transition={{ 
@@ -109,7 +158,6 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Animated background elements */}
       <motion.div
         className="absolute inset-0 pointer-events-none"
         initial={{ opacity: 0 }}
