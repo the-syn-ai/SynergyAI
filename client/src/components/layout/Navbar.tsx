@@ -1,4 +1,4 @@
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
@@ -10,12 +10,25 @@ import {
 } from "@/components/ui/navigation-menu";
 
 export default function Navbar() {
+  const [, setLocation] = useLocation();
+
+  const handleLogoClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    // Navigate to home
+    setLocation("/");
+    // Scroll to top with smooth animation
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm border-b">
       <nav className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <Link href="/">
-          <a className="text-2xl font-bold">SynergyAI</a>
-        </Link>
+        <button 
+          onClick={handleLogoClick}
+          className="text-2xl font-bold hover:text-primary transition-colors"
+        >
+          SynergyAI
+        </button>
 
         <NavigationMenu>
           <NavigationMenuList>
