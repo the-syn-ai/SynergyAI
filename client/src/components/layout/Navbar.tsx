@@ -52,11 +52,6 @@ export default function Navbar() {
               </NavigationMenuContent>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Link href="/calendar">
-                <a className="px-4 py-2 hover:text-primary">Calendar</a>
-              </Link>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
               <Link href="/pricing">
                 <a className="px-4 py-2 hover:text-primary">Pricing</a>
               </Link>
