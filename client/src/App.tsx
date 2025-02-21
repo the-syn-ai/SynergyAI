@@ -21,8 +21,8 @@ function Router() {
       <Route path="/services" component={Services} />
       <Route path="/pricing" component={Pricing} />
       <Route path="/contact" component={Contact} />
+      <Route path="/calendar" component={Calendar} />
       <Route path="/admin/dashboard" component={Dashboard} />
-      <Route path="/admin/calendar" component={Calendar} />
       <Route component={NotFound} />
     </Switch>
   );

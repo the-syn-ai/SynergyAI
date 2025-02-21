@@ -4,7 +4,6 @@ import {
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
@@ -14,9 +13,7 @@ export default function Navbar() {
 
   const handleLogoClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    // Navigate to home
     setLocation("/");
-    // Scroll to top with smooth animation
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -36,37 +33,50 @@ export default function Navbar() {
               <NavigationMenuTrigger>Services</NavigationMenuTrigger>
               <NavigationMenuContent>
                 <div className="grid gap-3 p-6 w-[400px]">
-                  <NavigationMenuLink href="/services#automation">
-                    Business Automation
-                  </NavigationMenuLink>
-                  <NavigationMenuLink href="/services#web">
-                    Web Design & Hosting
-                  </NavigationMenuLink>
-                  <NavigationMenuLink href="/services#crm">
-                    CRM Solutions
-                  </NavigationMenuLink>
+                  <Link href="/services#automation">
+                    <a className="block p-2 hover:bg-accent rounded-md">
+                      Business Automation
+                    </a>
+                  </Link>
+                  <Link href="/services#web">
+                    <a className="block p-2 hover:bg-accent rounded-md">
+                      Web Design & Hosting
+                    </a>
+                  </Link>
+                  <Link href="/services#crm">
+                    <a className="block p-2 hover:bg-accent rounded-md">
+                      CRM Solutions
+                    </a>
+                  </Link>
                 </div>
               </NavigationMenuContent>
             </NavigationMenuItem>
             <NavigationMenuItem>
+              <Link href="/calendar">
+                <a className="px-4 py-2 hover:text-primary">Calendar</a>
+              </Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
               <Link href="/pricing">
-                <a className="px-4 py-2">Pricing</a>
+                <a className="px-4 py-2 hover:text-primary">Pricing</a>
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <Link href="/blog">
-                <a className="px-4 py-2">Blog</a>
+                <a className="px-4 py-2 hover:text-primary">Blog</a>
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <Link href="/contact">
-                <a className="px-4 py-2">Contact</a>
+                <a className="px-4 py-2 hover:text-primary">Contact</a>
               </Link>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
 
-        <Button>Get Started</Button>
+        <Link href="/contact">
+          <Button>Get Started</Button>
+        </Link>
       </nav>
     </header>
   );
