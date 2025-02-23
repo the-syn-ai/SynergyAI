@@ -25,39 +25,49 @@ export default function CompanyAIChat() {
     try {
       const webhookUrl = "https://primary-production-b5ce.up.railway.app/webhook/cbdec436-47ce-4e4f-bcbe-5fa1081c62e4";
 
-      // Log the request details
-      console.log('Submitting URL:', companyUrl);
+      // Format URL
+      const formattedUrl = companyUrl.startsWith('http') ? companyUrl : `https://${companyUrl}`;
 
-      const response = await fetch(webhookUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({ 
-          url: companyUrl.startsWith('http') ? companyUrl : `https://${companyUrl}`
-        })
-      });
+      // Log request attempt
+      console.log('Attempting to submit URL:', formattedUrl);
 
-      // Log the response status
-      console.log('Response status:', response.status);
+      try {
+        const response = await fetch(webhookUrl, {
+          method: 'POST',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({ url: formattedUrl })
+        });
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Error response:', errorText);
-        throw new Error(`Failed to submit website: ${response.status} ${errorText}`);
+        // Log response details
+        console.log('Response status:', response.status);
+        console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('Error response:', errorText);
+          throw new Error(`Server responded with status ${response.status}: ${errorText}`);
+        }
+
+        // Success case
+        toast({
+          title: "Success",
+          description: "Website submitted successfully!",
+        });
+
+        setCompanyUrl(""); // Clear the input
+        setIsTrained(true);
+        setMessages(prev => [...prev,
+          { text: "Great! I've analyzed your website. What would you like to know about your company?", isBot: true }
+        ]);
+
+      } catch (networkError) {
+        console.error('Network error details:', networkError);
+        throw new Error('Network request failed. Please check your connection and try again.');
       }
-
-      toast({
-        title: "Success",
-        description: "Website submitted successfully!",
-      });
-
-      setCompanyUrl(""); // Clear the input after successful submission
-      setIsTrained(true);
-      setMessages(prev => [...prev,
-        { text: "Great! I've analyzed your website. What would you like to know about your company?", isBot: true }
-      ]);
 
     } catch (error) {
       console.error('Error submitting website:', error);
@@ -80,7 +90,6 @@ export default function CompanyAIChat() {
     setInput("");
 
     try {
-      // Use OpenAI to generate a response
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
@@ -123,9 +132,7 @@ export default function CompanyAIChat() {
                 onChange={(e) => setCompanyUrl(e.target.value)}
                 placeholder="Enter your company website URL..."
                 disabled={isSubmitting}
-                type="url"
-                pattern="https?://.*|.*\..*"
-                title="Please enter a valid URL"
+                type="text"
                 className="text-lg p-6"
               />
             </div>
