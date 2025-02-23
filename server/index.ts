@@ -98,13 +98,17 @@ app.use((req, res, next) => {
     });
 
     if (app.get("env") === "development") {
+      log('Setting up Vite middleware...');
       await setupVite(app, server);
+      log('Vite middleware setup complete');
     } else {
+      log('Setting up static file serving...');
       serveStatic(app);
+      log('Static file serving setup complete');
     }
 
     const PORT = process.env.PORT || 5000;
-    server.listen(PORT, "0.0.0.0", () => {
+    server.listen(PORT, () => {
       log(`Server running in ${app.get("env")} mode on port ${PORT}`);
     });
   } catch (error) {

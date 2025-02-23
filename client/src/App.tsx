@@ -11,8 +11,16 @@ import Contact from "@/pages/Contact";
 import Pricing from "@/pages/Pricing";
 import Dashboard from "@/pages/admin/Dashboard";
 import NotFound from "@/pages/not-found";
+import { useEffect } from "react";
 
 function Router() {
+  // Log route changes in development
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('App mounted, router initialized');
+    }
+  }, []);
+
   return (
     <Switch>
       <Route path="/" component={Home} />
@@ -31,7 +39,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <div className="min-h-screen bg-background text-foreground">
         <Navbar />
-        <main>
+        <main className="relative">
           <Router />
         </main>
         <Footer />
