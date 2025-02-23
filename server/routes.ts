@@ -331,7 +331,7 @@ export async function registerRoutes(app: Express) {
 
       // Format the webhook URL with the query parameter
       const webhookUrl = new URL("https://primary-production-b5ce.up.railway.app/webhook/cbdec436-47ce-4e4f-bcbe-5fa1081c62e4");
-      webhookUrl.searchParams.append('url', url);
+      webhookUrl.searchParams.append('url', encodeURIComponent(url));
 
       console.log('Forwarding request to:', webhookUrl.toString());
 
