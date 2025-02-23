@@ -28,7 +28,12 @@ export default function CompanyAIChat() {
 
     try {
       // Send to n8n webhook
-      const response = await fetch(import.meta.env.VITE_N8N_WEBHOOK_URL, {
+      const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL;
+      if (!webhookUrl) {
+        throw new Error('Webhook URL not configured');
+      }
+
+      const response = await fetch(webhookUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -54,6 +59,7 @@ export default function CompanyAIChat() {
         { text: "Great! I've analyzed your website. What would you like to know about your company?", isBot: true }
       ]);
     } catch (error) {
+      console.error('Error processing website:', error);
       toast({
         title: "Error",
         description: "Failed to process website. Please try again.",
@@ -100,6 +106,7 @@ export default function CompanyAIChat() {
       const { reply } = await response.json();
       setMessages(prev => [...prev, { text: reply, isBot: true }]);
     } catch (error) {
+      console.error('Error processing message:', error);
       toast({
         title: "Error",
         description: "Failed to process message. Please try again.",
