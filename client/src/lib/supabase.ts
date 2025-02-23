@@ -16,6 +16,11 @@ try {
   console.error('Failed to initialize Supabase client:', error);
 }
 
+interface CompanyEmbedding {
+  content: string;
+  similarity: number;
+}
+
 export const saveCompanyData = async (companyUrl: string, data: any) => {
   if (!supabase) {
     console.warn('Supabase not initialized, skipping data save');
@@ -41,7 +46,7 @@ export const saveCompanyData = async (companyUrl: string, data: any) => {
   }
 };
 
-export const queryCompanyData = async (companyUrl: string, query: string) => {
+export const queryCompanyData = async (companyUrl: string, query: string): Promise<CompanyEmbedding[]> => {
   if (!supabase) {
     console.warn('Supabase not initialized, returning empty results');
     return [];

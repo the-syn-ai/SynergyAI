@@ -19,14 +19,24 @@ const systemPrompts = {
   es: {
     sentiment: "Eres un experto en análisis de sentimientos. Analiza el sentimiento del texto y proporciona una respuesta que indique si es positivo, negativo o neutral. Mantén la respuesta concisa e incluye un emoji apropiado.",
     chat: "Eres un asistente de IA útil. Utiliza el contexto proporcionado para responder preguntas sobre la empresa. Si no encuentras información relevante en el contexto, dilo educadamente. Mantén las respuestas profesionales y precisas.",
-    vision: "Analiza esta imagen y describe lo que ves. Concéntrate en los elementos clave y cualquier contexto empresarial relevante."
-  },
+    vision: "Analiza esta imagen y describe lo que ves. Concéntrate en los elementos clave y cualquier contexto empresarial relevante.",
+    website: "Eres un experto en análisis de sitios web. Analiza el contenido del sitio web proporcionado y brinda información sobre la presencia en línea de la empresa, la estrategia de marketing y las posibles mejoras."
+  }
 };
 
-const getSystemPrompt = (type: 'sentiment' | 'chat' | 'vision' | 'website', language: string) => {
+// Type definition for the prompt types
+type PromptType = 'sentiment' | 'chat' | 'vision' | 'website';
+
+const getSystemPrompt = (type: PromptType, language: string) => {
   const languagePrompts = systemPrompts[language as keyof typeof systemPrompts] || systemPrompts.en;
   return languagePrompts[type];
 };
+
+// Type definition for analysis results
+interface AnalysisResult {
+  content: string;
+  timestamp: string;
+}
 
 export async function registerRoutes(app: Express) {
   app.get("/api/posts", async (_req, res) => {
@@ -145,10 +155,10 @@ export async function registerRoutes(app: Express) {
         websiteId: id,
         analysisType: type,
         results: {
-          content: response.choices[0].message.content,
+          content: response.choices[0].message.content || '',
           timestamp: new Date().toISOString()
-        },
-        confidence: 85 // Example confidence score
+        } as AnalysisResult,
+        confidence: 85
       });
 
       res.json(analysis);
@@ -248,7 +258,7 @@ export async function registerRoutes(app: Express) {
       }
 
       // Format context for the prompt
-      const contextText = context.length > 0 
+      const contextText = context.length > 0
         ? "\n\nRelevant company information:\n" + context.map((item: any) => item.content).join("\n")
         : "";
 
