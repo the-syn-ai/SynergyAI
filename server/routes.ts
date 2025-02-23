@@ -325,13 +325,17 @@ export async function registerRoutes(app: Express) {
   app.get("/api/forward-to-n8n", async (req, res) => {
     try {
       const { url } = req.query;
-      if (!url) {
+      if (!url || typeof url !== 'string') {
         return res.status(400).json({ error: "URL is required" });
       }
 
-      const webhookUrl = "https://primary-production-b5ce.up.railway.app/webhook/cbdec436-47ce-4e4f-bcbe-5fa1081c62e4";
+      // Format the webhook URL with the query parameter
+      const webhookUrl = new URL("https://primary-production-b5ce.up.railway.app/webhook/cbdec436-47ce-4e4f-bcbe-5fa1081c62e4");
+      webhookUrl.searchParams.append('url', url);
 
-      const response = await fetch(webhookUrl, {
+      console.log('Forwarding request to:', webhookUrl.toString());
+
+      const response = await fetch(webhookUrl.toString(), {
         method: 'GET',
         headers: {
           'Accept': 'application/json'

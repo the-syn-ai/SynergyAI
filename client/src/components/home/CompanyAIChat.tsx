@@ -25,13 +25,13 @@ export default function CompanyAIChat() {
     try {
       // Format URL
       const formattedUrl = companyUrl.startsWith('http') ? companyUrl : `https://${companyUrl}`;
+      const encodedUrl = encodeURIComponent(formattedUrl);
 
-      const response = await fetch('/api/forward-to-n8n', {
-        method: 'POST',
+      const response = await fetch(`/api/forward-to-n8n?url=${encodedUrl}`, {
+        method: 'GET',
         headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ url: formattedUrl })
+          'Accept': 'application/json'
+        }
       });
 
       if (!response.ok) {
