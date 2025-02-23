@@ -10,6 +10,25 @@ import {
   validateRequestBody
 } from "./middleware/security";
 
+// Validate required environment variables
+function validateEnvironment() {
+  const requiredVars = ['DATABASE_URL', 'OPENAI_API_KEY', 'SESSION_SECRET'];
+  const missingVars = requiredVars.filter(varName => !process.env[varName]);
+
+  if (missingVars.length > 0) {
+    throw new Error(`Missing required environment variables: ${missingVars.join(', ')}`);
+  }
+
+  // Check optional variables and log warnings
+  const optionalVars = ['SUPABASE_URL', 'SUPABASE_KEY'];
+  const missingOptionalVars = optionalVars.filter(varName => !process.env[varName]);
+
+  if (missingOptionalVars.length > 0) {
+    log(`Warning: Missing optional environment variables: ${missingOptionalVars.join(', ')}`);
+    log('Vector database functionality will be limited');
+  }
+}
+
 const app = express();
 
 // Trust proxy - required for Replit's environment
@@ -26,8 +45,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use('/api', validateRequestBody);
 
-
-// Request logging (mostly retained from original, but now after security middleware)
+// Request logging
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;
@@ -59,25 +77,38 @@ app.use((req, res, next) => {
 });
 
 (async () => {
-  const server = await registerRoutes(app);
+  try {
+    // Validate environment before starting the server
+    validateEnvironment();
 
-  // Error handling middleware (enhanced with errorLogger)
-  app.use(errorLogger);
-  app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
-    const status = err.status || err.statusCode || 500;
-    const message = err.message || "Internal Server Error";
+    const server = await registerRoutes(app);
 
-    res.status(status).json({ message });
-  });
+    // Error handling middleware
+    app.use(errorLogger);
+    app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
+      const status = err.status || err.statusCode || 500;
+      const message = err.message || "Internal Server Error";
 
-  if (app.get("env") === "development") {
-    await setupVite(app, server);
-  } else {
-    serveStatic(app);
+      // Log the full error in development
+      if (app.get("env") === "development") {
+        console.error(err);
+      }
+
+      res.status(status).json({ message });
+    });
+
+    if (app.get("env") === "development") {
+      await setupVite(app, server);
+    } else {
+      serveStatic(app);
+    }
+
+    const PORT = process.env.PORT || 5000;
+    server.listen(PORT, "0.0.0.0", () => {
+      log(`Server running in ${app.get("env")} mode on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error('Failed to start server:', error);
+    process.exit(1);
   }
-
-  const PORT = 5000;
-  server.listen(PORT, "0.0.0.0", () => {
-    log(`serving on port ${PORT}`);
-  });
 })();
