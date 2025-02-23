@@ -10,12 +10,12 @@ const openai = new OpenAI();
 const systemPrompts = {
   en: {
     sentiment: "You are a sentiment analysis expert. Analyze the sentiment of the text and provide a response that indicates if it's positive, negative, or neutral. Keep the response concise and include an appropriate emoji.",
-    chat: "You are a helpful AI assistant for a business automation company. Provide concise, professional responses focused on helping clients understand our services and capabilities.",
+    chat: "You are a helpful AI assistant. Use the provided context to answer questions about the company. If you don't find relevant information in the context, say so politely. Keep responses professional and accurate.",
     vision: "Analyze this image and describe what you see. Focus on key elements and any relevant business context."
   },
   es: {
     sentiment: "Eres un experto en análisis de sentimientos. Analiza el sentimiento del texto y proporciona una respuesta que indique si es positivo, negativo o neutral. Mantén la respuesta concisa e incluye un emoji apropiado.",
-    chat: "Eres un asistente de IA útil para una empresa de automatización empresarial. Proporciona respuestas concisas y profesionales centradas en ayudar a los clientes a comprender nuestros servicios y capacidades.",
+    chat: "Eres un asistente de IA útil. Utiliza el contexto proporcionado para responder preguntas sobre la empresa. Si no encuentras información relevante en el contexto, dilo educadamente. Mantén las respuestas profesionales y precisas.",
     vision: "Analiza esta imagen y describe lo que ves. Concéntrate en los elementos clave y cualquier contexto empresarial relevante."
   },
 };
@@ -84,11 +84,16 @@ export async function registerRoutes(app: Express) {
 
   app.post("/api/chat", async (req, res) => {
     try {
-      const { message, language = 'en' } = req.body;
+      const { message, context = [], language = 'en' } = req.body;
 
       if (!message) {
         return res.status(400).json({ error: "Message is required" });
       }
+
+      // Format context for the prompt
+      const contextText = context.length > 0 
+        ? "\n\nRelevant company information:\n" + context.map((item: any) => item.content).join("\n")
+        : "";
 
       const response = await openai.chat.completions.create({
         model: "gpt-4",
@@ -99,7 +104,7 @@ export async function registerRoutes(app: Express) {
           },
           {
             role: "user",
-            content: message
+            content: message + contextText
           }
         ],
         max_tokens: 150
