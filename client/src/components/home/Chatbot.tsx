@@ -1,16 +1,16 @@
 import { useState } from "react";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { MessageCircle, X, Globe } from "lucide-react";
+import { Globe } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { saveCompanyData, queryCompanyData } from "@/lib/supabase";
 
-export default function Chatbot() {
+export default function CompanyAIChat() {
   const { toast } = useToast();
-  const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Array<{ text: string; isBot: boolean }>>([
-    { text: "Hi! To get started, please enter your company website URL.", isBot: true },
+    { text: "Enter your company website URL to get started!", isBot: true },
   ]);
   const [input, setInput] = useState("");
   const [companyUrl, setCompanyUrl] = useState("");
@@ -51,7 +51,7 @@ export default function Chatbot() {
 
       setIsTrained(true);
       setMessages(prev => [...prev,
-        { text: "Great! I've learned about your company. What would you like to know?", isBot: true }
+        { text: "Great! I've analyzed your website. What would you like to know about your company?", isBot: true }
       ]);
     } catch (error) {
       toast({
@@ -109,86 +109,79 @@ export default function Chatbot() {
   };
 
   return (
-    <>
-      {!isOpen && (
-        <Button
-          className="fixed bottom-4 right-4 rounded-full h-12 w-12 p-0"
-          onClick={() => setIsOpen(true)}
-        >
-          <MessageCircle className="h-6 w-6" />
-        </Button>
-      )}
-
-      {isOpen && (
-        <Card className="fixed bottom-4 right-4 w-96 h-[600px] flex flex-col">
-          <CardHeader className="flex flex-row items-center justify-between">
-            <h3 className="font-semibold">Company AI Assistant</h3>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsOpen(false)}
+    <Card className="max-w-4xl mx-auto">
+      <CardContent className="p-6">
+        {!isTrained ? (
+          <motion.form 
+            onSubmit={handleUrlSubmit}
+            className="flex gap-4 items-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <div className="flex-1">
+              <Input
+                value={companyUrl}
+                onChange={(e) => setCompanyUrl(e.target.value)}
+                placeholder="Enter your company website URL..."
+                disabled={isTraining}
+                type="url"
+                className="text-lg p-6"
+              />
+            </div>
+            <Button 
+              type="submit" 
+              disabled={isTraining}
+              size="lg"
+              className="h-14"
             >
-              <X className="h-4 w-4" />
+              <Globe className="h-5 w-5 mr-2" />
+              {isTraining ? "Analyzing..." : "Analyze Website"}
             </Button>
-          </CardHeader>
-
-          <CardContent className="flex-1 overflow-y-auto">
-            <div className="space-y-4">
-              {!isTrained && (
-                <form onSubmit={handleUrlSubmit} className="flex gap-2 mb-4">
-                  <Input
-                    value={companyUrl}
-                    onChange={(e) => setCompanyUrl(e.target.value)}
-                    placeholder="Enter your company website URL..."
-                    disabled={isTraining}
-                    type="url"
-                  />
-                  <Button type="submit" disabled={isTraining}>
-                    <Globe className="h-4 w-4 mr-2" />
-                    Train
-                  </Button>
-                </form>
-              )}
-
-              <div className="space-y-4">
-                {messages.map((message, index) => (
+          </motion.form>
+        ) : (
+          <div className="space-y-6">
+            <div className="h-[400px] overflow-y-auto p-4 bg-muted rounded-lg space-y-4">
+              {messages.map((message, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: message.isBot ? -20 : 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className={`flex ${message.isBot ? "justify-start" : "justify-end"}`}
+                >
                   <div
-                    key={index}
-                    className={`flex ${
-                      message.isBot ? "justify-start" : "justify-end"
+                    className={`rounded-lg px-6 py-3 max-w-[80%] ${
+                      message.isBot
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted-foreground/10"
                     }`}
                   >
-                    <div
-                      className={`rounded-lg px-4 py-2 max-w-[80%] ${
-                        message.isBot
-                          ? "bg-muted"
-                          : "bg-primary text-primary-foreground"
-                      }`}
-                    >
-                      {message.text}
-                    </div>
+                    {message.text}
                   </div>
-                ))}
-              </div>
+                </motion.div>
+              ))}
             </div>
-          </CardContent>
 
-          {isTrained && (
             <form
               onSubmit={handleChatSubmit}
-              className="p-4 border-t flex gap-2"
+              className="flex gap-4"
             >
               <Input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask about the company..."
-                className="flex-1"
+                placeholder="Ask anything about your company..."
+                className="flex-1 text-lg p-6"
               />
-              <Button type="submit">Send</Button>
+              <Button 
+                type="submit"
+                size="lg"
+                className="h-14"
+              >
+                Send
+              </Button>
             </form>
-          )}
-        </Card>
-      )}
-    </>
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 }
