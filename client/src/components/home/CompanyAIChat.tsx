@@ -13,7 +13,7 @@ export default function CompanyAIChat() {
   ]);
   const [input, setInput] = useState("");
   const [companyUrl, setCompanyUrl] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false); //Changed from isTraining
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isTrained, setIsTrained] = useState(false);
 
   const handleUrlSubmit = async (e: React.FormEvent) => {
@@ -25,16 +25,27 @@ export default function CompanyAIChat() {
     try {
       const webhookUrl = "https://primary-production-b5ce.up.railway.app/webhook/cbdec436-47ce-4e4f-bcbe-5fa1081c62e4";
 
+      // Log the request details
+      console.log('Submitting URL:', companyUrl);
+
       const response = await fetch(webhookUrl, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
-        body: JSON.stringify({ url: companyUrl })
+        body: JSON.stringify({ 
+          url: companyUrl.startsWith('http') ? companyUrl : `https://${companyUrl}`
+        })
       });
 
+      // Log the response status
+      console.log('Response status:', response.status);
+
       if (!response.ok) {
-        throw new Error('Failed to submit website');
+        const errorText = await response.text();
+        console.error('Error response:', errorText);
+        throw new Error(`Failed to submit website: ${response.status} ${errorText}`);
       }
 
       toast({
@@ -52,7 +63,7 @@ export default function CompanyAIChat() {
       console.error('Error submitting website:', error);
       toast({
         title: "Error",
-        description: "Failed to submit website. Please try again.",
+        description: error instanceof Error ? error.message : "Failed to submit website. Please try again.",
         variant: "destructive"
       });
     } finally {
@@ -69,14 +80,6 @@ export default function CompanyAIChat() {
     setInput("");
 
     try {
-      // Try to query the vector database
-      let context = [];
-      try {
-        context = await queryCompanyData(companyUrl, userMessage);
-      } catch (error) {
-        console.warn('Failed to query vector database, continuing without context...');
-      }
-
       // Use OpenAI to generate a response
       const response = await fetch('/api/chat', {
         method: 'POST',
@@ -84,8 +87,7 @@ export default function CompanyAIChat() {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ 
-          message: userMessage,
-          context
+          message: userMessage
         })
       });
 
@@ -122,6 +124,8 @@ export default function CompanyAIChat() {
                 placeholder="Enter your company website URL..."
                 disabled={isSubmitting}
                 type="url"
+                pattern="https?://.*|.*\..*"
+                title="Please enter a valid URL"
                 className="text-lg p-6"
               />
             </div>
