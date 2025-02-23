@@ -4,7 +4,7 @@ import { storage } from "./storage";
 import { insertMessageSchema, insertSubscriberSchema } from "@shared/schema";
 import OpenAI from "openai";
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAI();
 
 // Language-specific system prompts
 const systemPrompts = {
@@ -18,7 +18,6 @@ const systemPrompts = {
     chat: "Eres un asistente de IA útil para una empresa de automatización empresarial. Proporciona respuestas concisas y profesionales centradas en ayudar a los clientes a comprender nuestros servicios y capacidades.",
     vision: "Analiza esta imagen y describe lo que ves. Concéntrate en los elementos clave y cualquier contexto empresarial relevante."
   },
-  // Add other languages as needed
 };
 
 const getSystemPrompt = (type: 'sentiment' | 'chat' | 'vision', language: string) => {
@@ -61,7 +60,7 @@ export async function registerRoutes(app: Express) {
       }
 
       const response = await openai.chat.completions.create({
-        model: "gpt-4o",
+        model: "gpt-4",
         messages: [
           {
             role: "system",
@@ -92,7 +91,7 @@ export async function registerRoutes(app: Express) {
       }
 
       const response = await openai.chat.completions.create({
-        model: "gpt-4o",
+        model: "gpt-4",
         messages: [
           {
             role: "system",
@@ -123,23 +122,20 @@ export async function registerRoutes(app: Express) {
       }
 
       const response = await openai.chat.completions.create({
-        model: "gpt-4o",
+        model: "gpt-4-vision-preview",
         messages: [
           {
             role: "user",
             content: [
-              {
-                type: "text",
-                text: getSystemPrompt('vision', language)
-              },
+              { type: "text", text: getSystemPrompt('vision', language) },
               {
                 type: "image_url",
                 image_url: {
                   url: image
                 }
               }
-            ],
-          },
+            ]
+          }
         ],
         max_tokens: 150
       });
