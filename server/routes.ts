@@ -4,7 +4,9 @@ import { storage } from "./storage";
 import { insertMessageSchema, insertSubscriberSchema } from "@shared/schema";
 import OpenAI from "openai";
 
-const openai = new OpenAI();
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
+});
 
 // Language-specific system prompts
 const systemPrompts = {
