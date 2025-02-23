@@ -24,6 +24,35 @@ export const subscribers = pgTable("subscribers", {
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
+// New tables for company analysis
+export const companyWebsites = pgTable("company_websites", {
+  id: serial("id").primaryKey(),
+  url: text("url").notNull(),
+  name: varchar("name", { length: 200 }),
+  lastAnalyzed: timestamp("last_analyzed"),
+  status: varchar("status", { length: 50 }).notNull(),
+  metadata: jsonb("metadata"),
+  createdAt: timestamp("created_at").defaultNow().notNull()
+});
+
+export const websiteAnalysis = pgTable("website_analysis", {
+  id: serial("id").primaryKey(),
+  websiteId: integer("website_id").references(() => companyWebsites.id),
+  analysisType: varchar("analysis_type", { length: 50 }).notNull(),
+  results: jsonb("results").notNull(),
+  confidence: integer("confidence"),
+  createdAt: timestamp("created_at").defaultNow().notNull()
+});
+
+export const userQueries = pgTable("user_queries", {
+  id: serial("id").primaryKey(),
+  websiteId: integer("website_id").references(() => companyWebsites.id),
+  query: text("query").notNull(),
+  response: text("response"),
+  context: jsonb("context"),
+  createdAt: timestamp("created_at").defaultNow().notNull()
+});
+
 export const aiDemos = pgTable("ai_demos", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 100 }).notNull(),
@@ -76,6 +105,12 @@ export const insertUserFeedbackSchema = createInsertSchema(userFeedback).omit({ 
 export const insertSecurityLogSchema = createInsertSchema(securityLogs).omit({ id: true, createdAt: true });
 export const insertFeatureTourSchema = createInsertSchema(featureTours).omit({ id: true, createdAt: true });
 
+// Add new schema exports
+export const insertCompanyWebsiteSchema = createInsertSchema(companyWebsites).omit({ id: true, createdAt: true, lastAnalyzed: true });
+export const insertWebsiteAnalysisSchema = createInsertSchema(websiteAnalysis).omit({ id: true, createdAt: true });
+export const insertUserQuerySchema = createInsertSchema(userQueries).omit({ id: true, createdAt: true });
+
+// Export types
 export type Post = typeof posts.$inferSelect;
 export type Message = typeof messages.$inferSelect;
 export type Subscriber = typeof subscribers.$inferSelect;
@@ -84,6 +119,9 @@ export type DemoSession = typeof demoSessions.$inferSelect;
 export type UserFeedback = typeof userFeedback.$inferSelect;
 export type SecurityLog = typeof securityLogs.$inferSelect;
 export type FeatureTour = typeof featureTours.$inferSelect;
+export type CompanyWebsite = typeof companyWebsites.$inferSelect;
+export type WebsiteAnalysis = typeof websiteAnalysis.$inferSelect;
+export type UserQuery = typeof userQueries.$inferSelect;
 
 export type InsertPost = z.infer<typeof insertPostSchema>;
 export type InsertMessage = z.infer<typeof insertMessageSchema>;
@@ -93,3 +131,6 @@ export type InsertDemoSession = z.infer<typeof insertDemoSessionSchema>;
 export type InsertUserFeedback = z.infer<typeof insertUserFeedbackSchema>;
 export type InsertSecurityLog = z.infer<typeof insertSecurityLogSchema>;
 export type InsertFeatureTour = z.infer<typeof insertFeatureTourSchema>;
+export type InsertCompanyWebsite = z.infer<typeof insertCompanyWebsiteSchema>;
+export type InsertWebsiteAnalysis = z.infer<typeof insertWebsiteAnalysisSchema>;
+export type InsertUserQuery = z.infer<typeof insertUserQuerySchema>;
