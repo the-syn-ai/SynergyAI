@@ -322,9 +322,9 @@ export async function registerRoutes(app: Express) {
   });
 
   // New route to handle n8n webhook forwarding
-  app.post("/api/forward-to-n8n", async (req, res) => {
+  app.get("/api/forward-to-n8n", async (req, res) => {
     try {
-      const { url } = req.body;
+      const { url } = req.query;
       if (!url) {
         return res.status(400).json({ error: "URL is required" });
       }
@@ -332,12 +332,10 @@ export async function registerRoutes(app: Express) {
       const webhookUrl = "https://primary-production-b5ce.up.railway.app/webhook/cbdec436-47ce-4e4f-bcbe-5fa1081c62e4";
 
       const response = await fetch(webhookUrl, {
-        method: 'POST',
+        method: 'GET',
         headers: {
-          'Content-Type': 'application/json',
           'Accept': 'application/json'
-        },
-        body: JSON.stringify({ url })
+        }
       });
 
       if (!response.ok) {
