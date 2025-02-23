@@ -1,7 +1,7 @@
 import Hero from "@/components/home/Hero";
 import Features from "@/components/home/Features";
 import Newsletter from "@/components/home/Newsletter";
-import CompanyAIChat from "@/components/home/Chatbot";
+import CompanyAIChat from "@/components/home/CompanyAIChat";
 
 export default function Home() {
   return (
