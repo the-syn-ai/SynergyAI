@@ -2,6 +2,15 @@ import { pgTable, text, serial, timestamp, varchar, integer, jsonb, boolean } fr
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
+// Add users table
+export const users = pgTable("users", {
+  id: serial("id").primaryKey(),
+  username: varchar("username", { length: 100 }).notNull().unique(),
+  password: text("password").notNull(),
+  email: varchar("email", { length: 100 }).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull()
+});
+
 export const posts = pgTable("posts", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
@@ -109,6 +118,7 @@ export const insertFeatureTourSchema = createInsertSchema(featureTours).omit({ i
 export const insertCompanyWebsiteSchema = createInsertSchema(companyWebsites).omit({ id: true, createdAt: true, lastAnalyzed: true });
 export const insertWebsiteAnalysisSchema = createInsertSchema(websiteAnalysis).omit({ id: true, createdAt: true });
 export const insertUserQuerySchema = createInsertSchema(userQueries).omit({ id: true, createdAt: true });
+export const insertUserSchema = createInsertSchema(users).omit({ id: true, createdAt: true });
 
 // Export types
 export type Post = typeof posts.$inferSelect;
@@ -122,6 +132,7 @@ export type FeatureTour = typeof featureTours.$inferSelect;
 export type CompanyWebsite = typeof companyWebsites.$inferSelect;
 export type WebsiteAnalysis = typeof websiteAnalysis.$inferSelect;
 export type UserQuery = typeof userQueries.$inferSelect;
+export type User = typeof users.$inferSelect;
 
 export type InsertPost = z.infer<typeof insertPostSchema>;
 export type InsertMessage = z.infer<typeof insertMessageSchema>;
@@ -134,3 +145,4 @@ export type InsertFeatureTour = z.infer<typeof insertFeatureTourSchema>;
 export type InsertCompanyWebsite = z.infer<typeof insertCompanyWebsiteSchema>;
 export type InsertWebsiteAnalysis = z.infer<typeof insertWebsiteAnalysisSchema>;
 export type InsertUserQuery = z.infer<typeof insertUserQuerySchema>;
+export type InsertUser = z.infer<typeof insertUserSchema>;

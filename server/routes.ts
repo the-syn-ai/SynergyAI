@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer } from "http";
 import { storage } from "./storage";
-import { insertMessageSchema, insertSubscriberSchema } from "@shared/schema";
+import { insertMessageSchema, insertSubscriberSchema, insertCompanyWebsiteSchema, insertWebsiteAnalysisSchema, insertUserQuerySchema } from "@shared/schema";
 import OpenAI from "openai";
 
 const openai = new OpenAI({
@@ -13,7 +13,8 @@ const systemPrompts = {
   en: {
     sentiment: "You are a sentiment analysis expert. Analyze the sentiment of the text and provide a response that indicates if it's positive, negative, or neutral. Keep the response concise and include an appropriate emoji.",
     chat: "You are a helpful AI assistant. Use the provided context to answer questions about the company. If you don't find relevant information in the context, say so politely. Keep responses professional and accurate.",
-    vision: "Analyze this image and describe what you see. Focus on key elements and any relevant business context."
+    vision: "Analyze this image and describe what you see. Focus on key elements and any relevant business context.",
+    website: "You are a website analysis expert. Analyze the provided website content and provide insights about the company's online presence, marketing strategy, and potential improvements."
   },
   es: {
     sentiment: "Eres un experto en análisis de sentimientos. Analiza el sentimiento del texto y proporciona una respuesta que indique si es positivo, negativo o neutral. Mantén la respuesta concisa e incluye un emoji apropiado.",
@@ -22,7 +23,7 @@ const systemPrompts = {
   },
 };
 
-const getSystemPrompt = (type: 'sentiment' | 'chat' | 'vision', language: string) => {
+const getSystemPrompt = (type: 'sentiment' | 'chat' | 'vision' | 'website', language: string) => {
   const languagePrompts = systemPrompts[language as keyof typeof systemPrompts] || systemPrompts.en;
   return languagePrompts[type];
 };
@@ -51,6 +52,160 @@ export async function registerRoutes(app: Express) {
 
     const subscriber = await storage.createSubscriber(result.data);
     res.json(subscriber);
+  });
+
+  // New routes for website analysis
+  app.post("/api/websites", async (req, res) => {
+    const result = insertCompanyWebsiteSchema.safeParse(req.body);
+    if (!result.success) {
+      return res.status(400).json({ error: "Invalid website data" });
+    }
+
+    try {
+      const existingWebsite = await storage.getCompanyWebsiteByUrl(result.data.url);
+      if (existingWebsite) {
+        return res.json(existingWebsite);
+      }
+
+      const website = await storage.createCompanyWebsite({
+        ...result.data,
+        status: 'pending'
+      });
+      res.json(website);
+    } catch (error) {
+      console.error('Error creating website:', error);
+      res.status(500).json({ error: "Failed to create website entry" });
+    }
+  });
+
+  app.get("/api/websites/:id", async (req, res) => {
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+      return res.status(400).json({ error: "Invalid website ID" });
+    }
+
+    try {
+      const website = await storage.getCompanyWebsite(id);
+      if (!website) {
+        return res.status(404).json({ error: "Website not found" });
+      }
+      res.json(website);
+    } catch (error) {
+      console.error('Error fetching website:', error);
+      res.status(500).json({ error: "Failed to fetch website" });
+    }
+  });
+
+  app.get("/api/websites/:id/analysis", async (req, res) => {
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+      return res.status(400).json({ error: "Invalid website ID" });
+    }
+
+    try {
+      const analyses = await storage.getWebsiteAnalyses(id);
+      res.json(analyses);
+    } catch (error) {
+      console.error('Error fetching analyses:', error);
+      res.status(500).json({ error: "Failed to fetch website analyses" });
+    }
+  });
+
+  app.post("/api/websites/:id/analyze", async (req, res) => {
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+      return res.status(400).json({ error: "Invalid website ID" });
+    }
+
+    try {
+      const website = await storage.getCompanyWebsite(id);
+      if (!website) {
+        return res.status(404).json({ error: "Website not found" });
+      }
+
+      const { type = 'general', language = 'en' } = req.body;
+
+      // Call OpenAI API to analyze the website
+      const response = await openai.chat.completions.create({
+        model: "gpt-4",
+        messages: [
+          {
+            role: "system",
+            content: getSystemPrompt('website', language)
+          },
+          {
+            role: "user",
+            content: `Analyze this website: ${website.url}\nFocus on: ${type}`
+          }
+        ],
+        max_tokens: 500
+      });
+
+      const analysis = await storage.createWebsiteAnalysis({
+        websiteId: id,
+        analysisType: type,
+        results: {
+          content: response.choices[0].message.content,
+          timestamp: new Date().toISOString()
+        },
+        confidence: 85 // Example confidence score
+      });
+
+      res.json(analysis);
+    } catch (error) {
+      console.error('Error analyzing website:', error);
+      res.status(500).json({ error: "Failed to analyze website" });
+    }
+  });
+
+  app.post("/api/websites/:id/query", async (req, res) => {
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+      return res.status(400).json({ error: "Invalid website ID" });
+    }
+
+    const { query, language = 'en' } = req.body;
+    if (!query) {
+      return res.status(400).json({ error: "Query is required" });
+    }
+
+    try {
+      const website = await storage.getCompanyWebsite(id);
+      if (!website) {
+        return res.status(404).json({ error: "Website not found" });
+      }
+
+      // Fetch existing analyses for context
+      const analyses = await storage.getWebsiteAnalyses(id);
+      const context = analyses.map(analysis => analysis.results.content).join('\n\n');
+
+      const response = await openai.chat.completions.create({
+        model: "gpt-4",
+        messages: [
+          {
+            role: "system",
+            content: getSystemPrompt('chat', language)
+          },
+          {
+            role: "user",
+            content: `Website: ${website.url}\n\nContext:\n${context}\n\nQuestion: ${query}`
+          }
+        ],
+        max_tokens: 150
+      });
+
+      const userQuery = await storage.createUserQuery({
+        websiteId: id,
+        query,
+        response: response.choices[0].message.content,
+        context: { analyses: analyses.map(a => a.id) }
+      });
+
+      res.json(userQuery);
+    } catch (error) {
+      console.error('Error processing query:', error);
+      res.status(500).json({ error: "Failed to process query" });
+    }
   });
 
   app.post("/api/analyze-sentiment", async (req, res) => {

@@ -1,8 +1,10 @@
+import { companyWebsites, websiteAnalysis, userQueries } from "@shared/schema";
+import type { CompanyWebsite, WebsiteAnalysis, UserQuery } from "@shared/schema";
+import type { InsertCompanyWebsite, InsertWebsiteAnalysis, InsertUserQuery } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 import { users, type User, type InsertUser } from "@shared/schema";
 import { posts, type Post, type InsertPost, messages, type Message, type InsertMessage, subscribers, type Subscriber, type InsertSubscriber } from "@shared/schema";
-
-// modify the interface with any CRUD methods
-// you might need
 
 export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
@@ -11,57 +13,86 @@ export interface IStorage {
   getPosts(): Promise<Post[]>;
   createMessage(message: InsertMessage): Promise<Message>;
   createSubscriber(subscriber: InsertSubscriber): Promise<Subscriber>;
+
+  // Company Website Analysis methods
+  createCompanyWebsite(website: InsertCompanyWebsite): Promise<CompanyWebsite>;
+  getCompanyWebsite(id: number): Promise<CompanyWebsite | undefined>;
+  getCompanyWebsiteByUrl(url: string): Promise<CompanyWebsite | undefined>;
+
+  // Analysis methods
+  createWebsiteAnalysis(analysis: InsertWebsiteAnalysis): Promise<WebsiteAnalysis>;
+  getWebsiteAnalyses(websiteId: number): Promise<WebsiteAnalysis[]>;
+
+  // User Query methods
+  createUserQuery(query: InsertUserQuery): Promise<UserQuery>;
+  getUserQueries(websiteId: number): Promise<UserQuery[]>;
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<number, User>;
-  private posts: Map<number, Post>;
-  private messages: Map<number, Message>;
-  private subscribers: Map<number, Subscriber>;
-  currentId: number;
-
-  constructor() {
-    this.users = new Map();
-    this.posts = new Map();
-    this.messages = new Map();
-    this.subscribers = new Map();
-    this.currentId = 1;
-  }
-
+export class DatabaseStorage implements IStorage {
   async getUser(id: number): Promise<User | undefined> {
-    return this.users.get(id);
+    const [result] = await db.select().from(users).where(eq(users.id, id));
+    return result;
   }
 
   async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
+    const [result] = await db.select().from(users).where(eq(users.username, username));
+    return result;
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
-    const id = this.currentId++;
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
-    return user;
+    const [result] = await db.insert(users).values(insertUser).returning();
+    return result;
   }
 
   async getPosts(): Promise<Post[]> {
-    return Array.from(this.posts.values());
+    return db.select().from(posts);
   }
 
-  async createMessage(insertMessage: InsertMessage): Promise<Message> {
-    const id = this.currentId++;
-    const message: Message = { ...insertMessage, id, createdAt: new Date() };
-    this.messages.set(id, message);
-    return message;
+  async createMessage(message: InsertMessage): Promise<Message> {
+    const [result] = await db.insert(messages).values(message).returning();
+    return result;
   }
 
-  async createSubscriber(insertSubscriber: InsertSubscriber): Promise<Subscriber> {
-    const id = this.currentId++;
-    const subscriber: Subscriber = { ...insertSubscriber, id, createdAt: new Date() };
-    this.subscribers.set(id, subscriber);
-    return subscriber;
+  async createSubscriber(subscriber: InsertSubscriber): Promise<Subscriber> {
+    const [result] = await db.insert(subscribers).values(subscriber).returning();
+    return result;
+  }
+
+  // Company Website methods
+  async createCompanyWebsite(website: InsertCompanyWebsite): Promise<CompanyWebsite> {
+    const [result] = await db.insert(companyWebsites).values(website).returning();
+    return result;
+  }
+
+  async getCompanyWebsite(id: number): Promise<CompanyWebsite | undefined> {
+    const [result] = await db.select().from(companyWebsites).where(eq(companyWebsites.id, id));
+    return result;
+  }
+
+  async getCompanyWebsiteByUrl(url: string): Promise<CompanyWebsite | undefined> {
+    const [result] = await db.select().from(companyWebsites).where(eq(companyWebsites.url, url));
+    return result;
+  }
+
+  // Analysis methods
+  async createWebsiteAnalysis(analysis: InsertWebsiteAnalysis): Promise<WebsiteAnalysis> {
+    const [result] = await db.insert(websiteAnalysis).values(analysis).returning();
+    return result;
+  }
+
+  async getWebsiteAnalyses(websiteId: number): Promise<WebsiteAnalysis[]> {
+    return db.select().from(websiteAnalysis).where(eq(websiteAnalysis.websiteId, websiteId));
+  }
+
+  // User Query methods
+  async createUserQuery(query: InsertUserQuery): Promise<UserQuery> {
+    const [result] = await db.insert(userQueries).values(query).returning();
+    return result;
+  }
+
+  async getUserQueries(websiteId: number): Promise<UserQuery[]> {
+    return db.select().from(userQueries).where(eq(userQueries.websiteId, websiteId));
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();
