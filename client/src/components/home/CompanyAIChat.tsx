@@ -23,51 +23,32 @@ export default function CompanyAIChat() {
     setIsSubmitting(true);
 
     try {
-      const webhookUrl = "https://primary-production-b5ce.up.railway.app/webhook/cbdec436-47ce-4e4f-bcbe-5fa1081c62e4";
-
       // Format URL
       const formattedUrl = companyUrl.startsWith('http') ? companyUrl : `https://${companyUrl}`;
 
-      // Log request attempt
-      console.log('Attempting to submit URL:', formattedUrl);
+      const response = await fetch('/api/forward-to-n8n', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ url: formattedUrl })
+      });
 
-      try {
-        const response = await fetch(webhookUrl, {
-          method: 'POST',
-          mode: 'cors',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify({ url: formattedUrl })
-        });
-
-        // Log response details
-        console.log('Response status:', response.status);
-        console.log('Response headers:', Object.fromEntries(response.headers.entries()));
-
-        if (!response.ok) {
-          const errorText = await response.text();
-          console.error('Error response:', errorText);
-          throw new Error(`Server responded with status ${response.status}: ${errorText}`);
-        }
-
-        // Success case
-        toast({
-          title: "Success",
-          description: "Website submitted successfully!",
-        });
-
-        setCompanyUrl(""); // Clear the input
-        setIsTrained(true);
-        setMessages(prev => [...prev,
-          { text: "Great! I've analyzed your website. What would you like to know about your company?", isBot: true }
-        ]);
-
-      } catch (networkError) {
-        console.error('Network error details:', networkError);
-        throw new Error('Network request failed. Please check your connection and try again.');
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to submit website');
       }
+
+      toast({
+        title: "Success",
+        description: "Website submitted successfully!",
+      });
+
+      setCompanyUrl(""); // Clear the input
+      setIsTrained(true);
+      setMessages(prev => [...prev,
+        { text: "Great! I've analyzed your website. What would you like to know about your company?", isBot: true }
+      ]);
 
     } catch (error) {
       console.error('Error submitting website:', error);

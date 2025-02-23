@@ -3,6 +3,7 @@ import { createServer } from "http";
 import { storage } from "./storage";
 import { insertMessageSchema, insertSubscriberSchema, insertCompanyWebsiteSchema, insertWebsiteAnalysisSchema, insertUserQuerySchema } from "@shared/schema";
 import OpenAI from "openai";
+import fetch from 'node-fetch';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
@@ -317,6 +318,39 @@ export async function registerRoutes(app: Express) {
     } catch (error) {
       console.error('OpenAI API Error:', error);
       res.status(500).json({ error: "Failed to analyze image" });
+    }
+  });
+
+  // New route to handle n8n webhook forwarding
+  app.post("/api/forward-to-n8n", async (req, res) => {
+    try {
+      const { url } = req.body;
+      if (!url) {
+        return res.status(400).json({ error: "URL is required" });
+      }
+
+      const webhookUrl = "https://primary-production-b5ce.up.railway.app/webhook/cbdec436-47ce-4e4f-bcbe-5fa1081c62e4";
+
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({ url })
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('N8N webhook error:', errorText);
+        return res.status(response.status).json({ error: errorText });
+      }
+
+      const data = await response.json();
+      res.json(data);
+    } catch (error) {
+      console.error('Error forwarding to n8n:', error);
+      res.status(500).json({ error: "Failed to forward request to n8n" });
     }
   });
 
