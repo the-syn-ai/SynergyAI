@@ -5,7 +5,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Globe } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { saveCompanyData, queryCompanyData } from "@/lib/supabase";
 
 export default function CompanyAIChat() {
   const { toast } = useToast();
@@ -14,24 +13,17 @@ export default function CompanyAIChat() {
   ]);
   const [input, setInput] = useState("");
   const [companyUrl, setCompanyUrl] = useState("");
-  const [isTraining, setIsTraining] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false); //Changed from isTraining
   const [isTrained, setIsTrained] = useState(false);
 
   const handleUrlSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!companyUrl.trim()) return;
 
-    setIsTraining(true);
-    setMessages(prev => [...prev, 
-      { text: `Training AI on ${companyUrl}...`, isBot: true }
-    ]);
+    setIsSubmitting(true);
 
     try {
-      // Send to n8n webhook
-      const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL;
-      if (!webhookUrl) {
-        throw new Error('Webhook URL not configured');
-      }
+      const webhookUrl = "https://primary-production-b5ce.up.railway.app/webhook/cbdec436-47ce-4e4f-bcbe-5fa1081c62e4";
 
       const response = await fetch(webhookUrl, {
         method: 'POST',
@@ -42,31 +34,29 @@ export default function CompanyAIChat() {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to process website');
+        throw new Error('Failed to submit website');
       }
 
-      const data = await response.json();
+      toast({
+        title: "Success",
+        description: "Website submitted successfully!",
+      });
 
-      // Try to save the crawled data to Supabase
-      try {
-        await saveCompanyData(companyUrl, data);
-      } catch (error) {
-        console.warn('Failed to save to vector database, continuing with basic chat...');
-      }
-
+      setCompanyUrl(""); // Clear the input after successful submission
       setIsTrained(true);
       setMessages(prev => [...prev,
         { text: "Great! I've analyzed your website. What would you like to know about your company?", isBot: true }
       ]);
+
     } catch (error) {
-      console.error('Error processing website:', error);
+      console.error('Error submitting website:', error);
       toast({
         title: "Error",
-        description: "Failed to process website. Please try again.",
+        description: "Failed to submit website. Please try again.",
         variant: "destructive"
       });
     } finally {
-      setIsTraining(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -130,19 +120,19 @@ export default function CompanyAIChat() {
                 value={companyUrl}
                 onChange={(e) => setCompanyUrl(e.target.value)}
                 placeholder="Enter your company website URL..."
-                disabled={isTraining}
+                disabled={isSubmitting}
                 type="url"
                 className="text-lg p-6"
               />
             </div>
             <Button 
               type="submit" 
-              disabled={isTraining}
+              disabled={isSubmitting}
               size="lg"
               className="h-14"
             >
               <Globe className="h-5 w-5 mr-2" />
-              {isTraining ? "Analyzing..." : "Analyze Website"}
+              {isSubmitting ? "Submitting..." : "Analyze Website"}
             </Button>
           </motion.form>
         ) : (
