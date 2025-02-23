@@ -338,7 +338,8 @@ export async function registerRoutes(app: Express) {
       const response = await fetch(webhookUrl.toString(), {
         method: 'GET',
         headers: {
-          'Accept': 'application/json'
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
         }
       });
 
