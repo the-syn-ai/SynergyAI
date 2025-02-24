@@ -330,12 +330,11 @@ export async function registerRoutes(app: Express) {
       }
 
       // Format the webhook URL with the query parameter
-      const webhookUrl = new URL("https://primary-production-b5ce.up.railway.app/webhook/cbdec436-47ce-4e4f-bcbe-5fa1081c62e4");
-      webhookUrl.searchParams.append('url', encodeURIComponent(url));
+      const webhookUrl = "https://primary-production-b5ce.up.railway.app/webhook/cbdec436-47ce-4e4f-bcbe-5fa1081c62e4";
 
-      console.log('Forwarding request to:', webhookUrl.toString());
+      console.log('Forwarding request to:', webhookUrl);
 
-      const response = await fetch(webhookUrl.toString(), {
+      const response = await fetch(`${webhookUrl}?url=${encodeURIComponent(url)}`, {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
