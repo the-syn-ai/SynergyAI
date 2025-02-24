@@ -329,12 +329,21 @@ export async function registerRoutes(app: Express) {
         return res.status(400).json({ error: "URL is required" });
       }
 
+      // Log incoming request details
+      console.log('Incoming request headers:', req.headers);
+      console.log('Incoming request URL:', url);
+
       // Format the webhook URL
       const webhookUrl = "https://primary-production-b5ce.up.railway.app/webhook/cbdec436-47ce-4e4f-bcbe-5fa1081c62e4";
+      const fullUrl = `${webhookUrl}?url=${encodeURIComponent(url)}`;
 
-      console.log('Forwarding request to:', webhookUrl);
+      console.log('Forwarding request to:', fullUrl);
+      console.log('With headers:', {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      });
 
-      const response = await fetch(`${webhookUrl}?url=${encodeURIComponent(url)}`, {
+      const response = await fetch(fullUrl, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -344,11 +353,12 @@ export async function registerRoutes(app: Express) {
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('N8N webhook error:', errorText);
+        console.error('N8n webhook error:', errorText);
         return res.status(response.status).json({ error: errorText });
       }
 
       const data = await response.json();
+      console.log('N8n response:', data);
       res.json(data);
     } catch (error) {
       console.error('Error forwarding to n8n:', error);
