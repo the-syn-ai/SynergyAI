@@ -31,8 +31,9 @@ export default function CompanyAIChat() {
       const response = await fetch(`/api/forward-to-n8n?url=${encodedUrl}`, {
         method: 'GET',
         headers: {
-          'content-type': 'application/json',
-          'accept': 'application/json'
+          'User-Agent': 'curl/8.11.1',
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
         }
       });
 

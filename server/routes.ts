@@ -329,29 +329,21 @@ export async function registerRoutes(app: Express) {
         return res.status(400).json({ error: "URL is required" });
       }
 
-      // Log detailed request information
-      console.log('=== Incoming Request Details ===');
-      console.log('Headers:', JSON.stringify(req.headers, null, 2));
-      console.log('Query URL:', url);
-      console.log('Full URL:', req.url);
-
-      // Format webhook URL
       const webhookUrl = "https://primary-production-b5ce.up.railway.app/webhook/cbdec436-47ce-4e4f-bcbe-5fa1081c62e4";
       const fullUrl = `${webhookUrl}?url=${encodeURIComponent(url)}`;
 
       console.log('=== Outgoing Request Details ===');
       console.log('URL:', fullUrl);
 
-      const headers = {
-        'content-type': 'application/json',
-        'accept': 'application/json'
-      };
-
-      console.log('Headers:', headers);
-
+      // Using the exact headers that worked in curl
       const response = await fetch(fullUrl, {
         method: 'GET',
-        headers: headers
+        headers: {
+          'User-Agent': 'curl/8.11.1',
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Host': 'primary-production-b5ce.up.railway.app'
+        }
       });
 
       // Log response details
