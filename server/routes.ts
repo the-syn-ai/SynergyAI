@@ -329,27 +329,35 @@ export async function registerRoutes(app: Express) {
         return res.status(400).json({ error: "URL is required" });
       }
 
-      // Log incoming request details
-      console.log('Incoming request headers:', req.headers);
-      console.log('Incoming request URL:', url);
+      // Log detailed request information
+      console.log('=== Incoming Request Details ===');
+      console.log('Headers:', JSON.stringify(req.headers, null, 2));
+      console.log('Query URL:', url);
+      console.log('Full URL:', req.url);
 
-      // Format the webhook URL
+      // Format webhook URL
       const webhookUrl = "https://primary-production-b5ce.up.railway.app/webhook/cbdec436-47ce-4e4f-bcbe-5fa1081c62e4";
       const fullUrl = `${webhookUrl}?url=${encodeURIComponent(url)}`;
 
-      console.log('Forwarding request to:', fullUrl);
-      console.log('With headers:', {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      });
+      console.log('=== Outgoing Request Details ===');
+      console.log('URL:', fullUrl);
+
+      const headers = {
+        'content-type': 'application/json',
+        'accept': 'application/json'
+      };
+
+      console.log('Headers:', headers);
 
       const response = await fetch(fullUrl, {
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
+        headers: headers
       });
+
+      // Log response details
+      console.log('=== Response Details ===');
+      console.log('Status:', response.status);
+      console.log('Headers:', Object.fromEntries(response.headers.entries()));
 
       if (!response.ok) {
         const errorText = await response.text();

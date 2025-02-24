@@ -27,26 +27,22 @@ export default function CompanyAIChat() {
       const formattedUrl = companyUrl.startsWith('http') ? companyUrl : `https://${companyUrl}`;
       const encodedUrl = encodeURIComponent(formattedUrl);
 
-      console.log('Sending request to:', `/api/forward-to-n8n?url=${encodedUrl}`);
-      console.log('With headers:', {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      });
-
+      // First, make the request to our backend
       const response = await fetch(`/api/forward-to-n8n?url=${encodedUrl}`, {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
+          'content-type': 'application/json',
+          'accept': 'application/json'
         }
       });
 
       console.log('Response status:', response.status);
+      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
 
       if (!response.ok) {
-        const error = await response.json();
-        console.error('Error response:', error);
-        throw new Error(error.error || 'Failed to submit website');
+        const errorData = await response.text();
+        console.error('Error response:', errorData);
+        throw new Error(errorData || 'Failed to submit website');
       }
 
       const data = await response.json();
