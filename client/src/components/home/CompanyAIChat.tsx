@@ -30,6 +30,7 @@ export default function CompanyAIChat() {
       const response = await fetch(`/api/forward-to-n8n?url=${encodedUrl}`, {
         method: 'GET',
         headers: {
+          'Content-Type': 'application/json',
           'Accept': 'application/json'
         }
       });
@@ -38,6 +39,8 @@ export default function CompanyAIChat() {
         const error = await response.json();
         throw new Error(error.error || 'Failed to submit website');
       }
+
+      const data = await response.json();
 
       toast({
         title: "Success",

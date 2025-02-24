@@ -329,7 +329,7 @@ export async function registerRoutes(app: Express) {
         return res.status(400).json({ error: "URL is required" });
       }
 
-      // Format the webhook URL with the query parameter
+      // Format the webhook URL
       const webhookUrl = "https://primary-production-b5ce.up.railway.app/webhook/cbdec436-47ce-4e4f-bcbe-5fa1081c62e4";
 
       console.log('Forwarding request to:', webhookUrl);
@@ -337,8 +337,8 @@ export async function registerRoutes(app: Express) {
       const response = await fetch(`${webhookUrl}?url=${encodeURIComponent(url)}`, {
         method: 'GET',
         headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
         }
       });
 
