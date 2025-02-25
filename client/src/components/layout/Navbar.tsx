@@ -69,7 +69,7 @@ export default function Navbar() {
           </NavigationMenuList>
         </NavigationMenu>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center">
           <a 
             href="https://cal.com/synai-automations-i329dt/intro-call" 
             target="_blank" 
@@ -82,9 +82,6 @@ export default function Navbar() {
               Let's Talk
             </Button>
           </a>
-          <Link href="/contact">
-            <Button>Get Started</Button>
-          </Link>
         </div>
       </nav>
     </header>
