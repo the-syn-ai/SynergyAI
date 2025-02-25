@@ -1,11 +1,6 @@
 import { motion } from "framer-motion";
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Globe, Box, Mail, Phone, MessageSquare, Star } from "lucide-react";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const features = [
   {
@@ -47,38 +42,8 @@ const features = [
 ];
 
 export default function Features() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
-
-  useEffect(() => {
-    if (!sectionRef.current) return;
-
-    const cards = cardsRef.current.filter(Boolean);
-
-    // GSAP animations for cards
-    cards.forEach((card, index) => {
-      gsap.from(card, {
-        scrollTrigger: {
-          trigger: card,
-          start: "top bottom-=100",
-          toggleActions: "play none none reverse"
-        },
-        opacity: 0,
-        y: 50,
-        rotation: -5,
-        duration: 0.8,
-        ease: "power2.out",
-        delay: index * 0.1
-      });
-    });
-
-    return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-    };
-  }, []);
-
   return (
-    <section ref={sectionRef} className="py-20 bg-gradient-to-b from-background to-muted/50">
+    <section className="py-20 bg-gradient-to-b from-background to-muted/50">
       <div className="container mx-auto px-4">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -95,9 +60,12 @@ export default function Features() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((feature, index) => (
-            <div
+            <motion.div
               key={index}
-              ref={el => cardsRef.current[index] = el}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              viewport={{ once: true }}
               className="h-full"
             >
               <Card className="h-full backdrop-blur-sm bg-card/80 border-primary/10 hover:border-primary/20 transition-all duration-300 hover:scale-105">
@@ -115,7 +83,7 @@ export default function Features() {
                   <p className="text-sm text-primary/80">{feature.details}</p>
                 </CardContent>
               </Card>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
