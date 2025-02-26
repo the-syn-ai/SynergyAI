@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Globe, Box, Mail, Phone, MessageSquare, Star } from "lucide-react";
@@ -45,16 +45,25 @@ const features = [
 ];
 
 export default function Features() {
-  const { isLoading, simulateLoading } = useLoading();
+  const { isLoading, setIsLoading, simulateLoading } = useLoading();
+  const [isLocalLoading, setIsLocalLoading] = useState(true);
   
-  // Simulate loading on mount for demonstration purposes
+  // Manually set loading state instead of simulating
   useEffect(() => {
-    simulateLoading("featuresSection", 2500);
-    // In a real application, you would start loading when fetching data and stop when data arrives
-  }, [simulateLoading]);
+    // Immediately set loading state
+    setIsLoading(prev => ({ ...prev, featuresSection: true }));
+    
+    // Clear loading state after a timeout
+    const timer = setTimeout(() => {
+      setIsLoading(prev => ({ ...prev, featuresSection: false }));
+      setIsLocalLoading(false);
+    }, 800);
+    
+    return () => clearTimeout(timer);
+  }, [setIsLoading]);
 
   // Show skeleton while loading
-  if (isLoading.featuresSection) {
+  if (isLoading.featuresSection || isLocalLoading) {
     return <FeaturesSectionSkeleton />;
   }
 
@@ -63,9 +72,8 @@ export default function Features() {
       <div className="container mx-auto px-4">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
           className="text-center mb-12"
         >
           <h2 className="text-3xl font-bold mb-4">Our Services</h2>
@@ -79,9 +87,8 @@ export default function Features() {
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
               className="h-full"
             >
               <Card className="h-full backdrop-blur-sm bg-card/80 border-primary/10 hover:border-primary/20 transition-all duration-300 hover:scale-105">

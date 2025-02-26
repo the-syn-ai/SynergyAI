@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   Accordion,
@@ -5,6 +6,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { useLoading } from "@/hooks/use-loading";
+import { FAQSectionSkeleton } from "@/components/ui/loading-skeleton";
 
 // FAQ data
 const faqItems = [
@@ -35,14 +38,35 @@ const faqItems = [
 ];
 
 export default function FAQ() {
+  const { isLoading, setIsLoading } = useLoading();
+  const [isLocalLoading, setIsLocalLoading] = useState(true);
+  
+  // Manually set loading state
+  useEffect(() => {
+    // Immediately set loading state
+    setIsLoading(prev => ({ ...prev, faqSection: true }));
+    
+    // Clear loading state after a timeout
+    const timer = setTimeout(() => {
+      setIsLoading(prev => ({ ...prev, faqSection: false }));
+      setIsLocalLoading(false);
+    }, 900); // Slightly longer than Features to ensure staggered loading
+    
+    return () => clearTimeout(timer);
+  }, [setIsLoading]);
+
+  // Show skeleton while loading
+  if (isLoading.faqSection || isLocalLoading) {
+    return <FAQSectionSkeleton />;
+  }
+
   return (
     <section className="py-20 bg-muted/30">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
           className="text-center mb-12"
         >
           <h2 className="text-3xl font-bold mb-4">Frequently Asked Questions</h2>
@@ -57,9 +81,8 @@ export default function FAQ() {
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
-                viewport={{ once: true }}
               >
                 <AccordionItem value={`item-${index}`}>
                   <AccordionTrigger className="text-left text-lg font-medium">
