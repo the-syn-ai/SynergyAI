@@ -12,6 +12,7 @@ import Pricing from "@/pages/Pricing";
 import Dashboard from "@/pages/admin/Dashboard";
 import NotFound from "@/pages/not-found";
 import { useEffect } from "react";
+import { LoadingProvider } from "./hooks/use-loading";
 
 function Router() {
   // Log route changes in development
@@ -37,14 +38,16 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="min-h-screen bg-background text-foreground">
-        <Navbar />
-        <main className="relative">
-          <Router />
-        </main>
-        <Footer />
-      </div>
-      <Toaster />
+      <LoadingProvider>
+        <div className="min-h-screen bg-background text-foreground">
+          <Navbar />
+          <main className="relative">
+            <Router />
+          </main>
+          <Footer />
+        </div>
+        <Toaster />
+      </LoadingProvider>
     </QueryClientProvider>
   );
 }
