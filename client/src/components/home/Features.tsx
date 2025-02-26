@@ -1,6 +1,9 @@
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Globe, Box, Mail, Phone, MessageSquare, Star } from "lucide-react";
+import { useLoading } from "@/hooks/use-loading";
+import { FeaturesSectionSkeleton } from "@/components/ui/loading-skeleton";
 
 const features = [
   {
@@ -42,6 +45,19 @@ const features = [
 ];
 
 export default function Features() {
+  const { isLoading, simulateLoading } = useLoading();
+  
+  // Simulate loading on mount for demonstration purposes
+  useEffect(() => {
+    simulateLoading("featuresSection", 2500);
+    // In a real application, you would start loading when fetching data and stop when data arrives
+  }, [simulateLoading]);
+
+  // Show skeleton while loading
+  if (isLoading.featuresSection) {
+    return <FeaturesSectionSkeleton />;
+  }
+
   return (
     <section className="py-20 bg-gradient-to-b from-background to-muted/50">
       <div className="container mx-auto px-4">
