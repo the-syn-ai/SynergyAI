@@ -31,6 +31,14 @@ async function comparePasswords(supplied: string, stored: string) {
 }
 
 export function setupAuth(app: Express) {
+  // Check if authentication is needed (DATABASE_URL and SESSION_SECRET present)
+  const authEnabled = !!process.env.DATABASE_URL && !!process.env.SESSION_SECRET;
+  
+  if (!authEnabled) {
+    console.log('Authentication disabled: DATABASE_URL and/or SESSION_SECRET not provided');
+    return; // Skip authentication setup
+  }
+  
   const sessionSettings: session.SessionOptions = {
     secret: process.env.SESSION_SECRET || 'dev-secret-key',
     resave: false,

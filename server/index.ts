@@ -12,20 +12,20 @@ import {
 
 // Validate required environment variables
 function validateEnvironment() {
-  const requiredVars = ['DATABASE_URL', 'OPENAI_API_KEY', 'SESSION_SECRET'];
+  const requiredVars = ['OPENAI_API_KEY']; // Only OpenAI API key is required
   const missingVars = requiredVars.filter(varName => !process.env[varName]);
 
   if (missingVars.length > 0) {
     throw new Error(`Missing required environment variables: ${missingVars.join(', ')}`);
   }
 
-  // Check optional variables and log warnings
-  const optionalVars = ['SUPABASE_URL', 'SUPABASE_KEY'];
+  // These variables are now optional since we don't need user authentication
+  const optionalVars = ['DATABASE_URL', 'SESSION_SECRET', 'SUPABASE_URL', 'SUPABASE_KEY'];
   const missingOptionalVars = optionalVars.filter(varName => !process.env[varName]);
 
   if (missingOptionalVars.length > 0) {
-    log(`Warning: Missing optional environment variables: ${missingOptionalVars.join(', ')}`);
-    log('Vector database functionality will be limited');
+    log(`Note: Missing optional environment variables: ${missingOptionalVars.join(', ')}`);
+    log('User authentication and vector database functionality will be limited');
   }
 }
 
