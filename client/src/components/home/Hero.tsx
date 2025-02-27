@@ -22,7 +22,7 @@ export default function Hero() {
   return (
     <motion.section
       ref={sectionRef}
-      className="min-h-[85vh] flex items-center relative overflow-hidden bg-gradient-to-br from-background via-background/95 to-muted/30"
+      className="min-h-[80vh] flex items-center relative overflow-hidden bg-gradient-to-br from-background via-background/95 to-muted/30"
     >
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">

@@ -41,7 +41,7 @@ function App() {
       <LoadingProvider>
         <div className="min-h-screen bg-background text-foreground">
           <Navbar />
-          <main className="relative">
+          <main className="relative pt-[100px] md:pt-[120px]"> {/* Adjusted padding to account for taller navbar */}
             <Router />
           </main>
           <Footer />
