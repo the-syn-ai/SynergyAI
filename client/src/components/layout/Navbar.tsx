@@ -23,36 +23,36 @@ export default function Navbar() {
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm border-b">
       <div className="container mx-auto px-4">
         {/* Logo Row - Always at the top */}
-        <div className="flex justify-center items-center py-3">
+        <div className="flex justify-center items-center py-4">
           <button 
             onClick={handleLogoClick}
-            className="text-2xl font-bold hover:text-primary transition-colors"
+            className="text-3xl md:text-4xl font-bold hover:text-primary transition-colors"
           >
             SynergyAI
           </button>
         </div>
         
         {/* Navigation Row - Below the logo */}
-        <nav className="flex flex-col md:flex-row justify-between items-center pb-3">
-          <div className="w-full md:w-auto flex justify-center mb-2 md:mb-0">
+        <nav className="flex flex-col md:flex-row justify-center items-center pb-4">
+          <div className="w-full flex justify-center mb-3 md:mb-0">
             <NavigationMenu>
-              <NavigationMenuList className="flex flex-wrap justify-center">
+              <NavigationMenuList className="flex flex-wrap justify-center gap-2 md:gap-4">
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="text-sm md:text-base">Services</NavigationMenuTrigger>
+                  <NavigationMenuTrigger className="text-base md:text-lg font-medium">Services</NavigationMenuTrigger>
                   <NavigationMenuContent>
-                    <div className="grid gap-3 p-4 w-[280px] md:w-[400px]">
+                    <div className="grid gap-3 p-4 w-[300px] md:w-[400px]">
                       <Link href="/services#automation">
-                        <a className="block p-2 hover:bg-accent rounded-md">
+                        <a className="block p-3 hover:bg-accent rounded-md text-base">
                           Business Automation
                         </a>
                       </Link>
                       <Link href="/services#web">
-                        <a className="block p-2 hover:bg-accent rounded-md">
+                        <a className="block p-3 hover:bg-accent rounded-md text-base">
                           Web Design & Hosting
                         </a>
                       </Link>
                       <Link href="/services#crm">
-                        <a className="block p-2 hover:bg-accent rounded-md">
+                        <a className="block p-3 hover:bg-accent rounded-md text-base">
                           CRM Solutions
                         </a>
                       </Link>
@@ -61,28 +61,29 @@ export default function Navbar() {
                 </NavigationMenuItem>
                 <NavigationMenuItem>
                   <Link href="/pricing">
-                    <a className="px-2 md:px-4 py-2 hover:text-primary text-sm md:text-base">Pricing</a>
+                    <a className="px-3 md:px-5 py-2 hover:text-primary text-base md:text-lg font-medium">Pricing</a>
                   </Link>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
                   <Link href="/blog">
-                    <a className="px-2 md:px-4 py-2 hover:text-primary text-sm md:text-base">Blog</a>
+                    <a className="px-3 md:px-5 py-2 hover:text-primary text-base md:text-lg font-medium">Blog</a>
                   </Link>
                 </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
           </div>
 
-          <div className="flex items-center mt-2 md:mt-0">
+          <div className="flex justify-center items-center w-full mt-3 md:mt-0">
             <a 
               href="https://cal.com/synai-automations-i329dt/intro-call" 
               target="_blank" 
               rel="noopener noreferrer"
+              className="w-full max-w-[200px] flex justify-center"
             >
               <Button 
                 variant="outline" 
-                size={isMobile ? "sm" : "default"}
-                className="font-semibold transition-all duration-300 hover:scale-105 hover:shadow-[0_0_15px_rgba(var(--primary-rgb),0.5)] hover:border-primary/50"
+                size="default"
+                className="w-full font-semibold text-base transition-all duration-300 hover:scale-105 hover:shadow-[0_0_15px_rgba(var(--primary-rgb),0.5)] hover:border-primary/50"
               >
                 Let's Talk
               </Button>
