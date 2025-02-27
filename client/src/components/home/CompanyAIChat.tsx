@@ -231,11 +231,11 @@ export default function CompanyAIChat() {
           
             <motion.form 
               onSubmit={handleUrlSubmit}
-              className="flex gap-4 items-center"
+              className="flex flex-col sm:flex-row gap-4 items-center"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
             >
-              <div className="flex-1">
+              <div className="w-full">
                 <Input
                   value={companyUrl}
                   onChange={(e) => setCompanyUrl(e.target.value)}
@@ -249,7 +249,7 @@ export default function CompanyAIChat() {
                 type="submit" 
                 disabled={isSubmitting}
                 size="lg"
-                className="h-14"
+                className="h-14 w-full sm:w-auto"
               >
                 {isSubmitting ? (
                   <>
@@ -349,18 +349,18 @@ export default function CompanyAIChat() {
 
                 <form
                   onSubmit={handleChatSubmit}
-                  className="flex gap-4"
+                  className="flex flex-col sm:flex-row gap-4"
                 >
                   <Input
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder="Ask about performance, SEO, accessibility, or security..."
-                    className="flex-1 text-lg p-6"
+                    className="w-full text-lg p-6"
                   />
                   <Button 
                     type="submit"
                     size="lg"
-                    className="h-14"
+                    className="h-14 w-full sm:w-auto"
                     disabled={!input.trim()}
                   >
                     <SendIcon className="h-5 w-5 mr-2" />
