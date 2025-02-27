@@ -61,11 +61,7 @@ export default function Navbar() {
                 <a className="px-4 py-2 hover:text-primary">Blog</a>
               </Link>
             </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Link href="/contact">
-                <a className="px-4 py-2 hover:text-primary">Contact</a>
-              </Link>
-            </NavigationMenuItem>
+
           </NavigationMenuList>
         </NavigationMenu>
 
