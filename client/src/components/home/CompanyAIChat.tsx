@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Globe, Search, Zap, CheckCircle, LoaderCircle, SendIcon, AlertTriangle, BarChart } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useLoading } from "@/hooks/use-loading";
+import ShareResults from "@/components/common/ShareResults";
 
 // Different analysis types
 type AnalysisCategory = 'performance' | 'seo' | 'accessibility' | 'security';
@@ -322,6 +323,13 @@ export default function CompanyAIChat() {
                     </div>
                   ))}
                 </div>
+                
+                {/* Share Results Component */}
+                <ShareResults 
+                  title={`AI Website Analysis for ${companyUrl}`}
+                  summary={`Our AI analysis found areas of strength and opportunities for improvement on your website.`}
+                  scores={analysisScores}
+                />
                 
                 <div className="h-[400px] overflow-y-auto p-4 bg-muted/20 rounded-lg space-y-4 border border-primary/10">
                   <AnimatePresence>
