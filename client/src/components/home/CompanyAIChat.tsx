@@ -30,6 +30,7 @@ export default function CompanyAIChat() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isTrained, setIsTrained] = useState(false);
   const [activeTab, setActiveTab] = useState<string>("analyze");
+  const [analysisComplete, setAnalysisComplete] = useState(false);
   const [analysisScores, setAnalysisScores] = useState<AnalysisScores>({
     performance: 0,
     seo: 0,
@@ -89,12 +90,21 @@ export default function CompanyAIChat() {
         });
 
         setIsTrained(true);
+        setAnalysisComplete(true);
         setMessages(prev => [...prev,
           { text: `I've analyzed ${formattedUrl} and found some interesting insights:\n\n• Performance: ${randomScores.performance}/100\n• SEO: ${randomScores.seo}/100\n• Accessibility: ${randomScores.accessibility}/100\n• Security: ${randomScores.security}/100\n\nWhat specific area would you like to know more about?`, isBot: true }
         ]);
         
-        setActiveTab("chat");
-        setIsSubmitting(false);
+        // Automatically switch to chat tab with a small delay for better UX
+        setTimeout(() => {
+          setActiveTab("chat");
+          setIsSubmitting(false);
+          
+          // Reset analysis complete flag after animation is done
+          setTimeout(() => {
+            setAnalysisComplete(false);
+          }, 1500);
+        }, 500);
       }, 3000);
 
     } catch (error) {
@@ -289,9 +299,33 @@ export default function CompanyAIChat() {
           <TabsContent value="chat" className="space-y-6">
             {isTrained && (
               <>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {(Object.keys(analysisScores) as AnalysisCategory[]).map((category) => (
-                    <div key={category} className="flex flex-col items-center p-4 rounded-lg bg-muted/50 border border-primary/10">
+                <motion.div 
+                  className="grid grid-cols-2 md:grid-cols-4 gap-4"
+                  initial={{ opacity: analysisComplete ? 0 : 1, scale: analysisComplete ? 0.9 : 1 }}
+                  animate={{ 
+                    opacity: 1, 
+                    scale: 1,
+                    transition: { 
+                      duration: 0.5,
+                      staggerChildren: 0.1,
+                      delayChildren: 0.1
+                    }
+                  }}
+                >
+                  {(Object.keys(analysisScores) as AnalysisCategory[]).map((category, index) => (
+                    <motion.div 
+                      key={category} 
+                      className="flex flex-col items-center p-4 rounded-lg bg-muted/50 border border-primary/10 overflow-hidden"
+                      initial={{ opacity: analysisComplete ? 0 : 1, y: analysisComplete ? 20 : 0 }}
+                      animate={{ 
+                        opacity: 1, 
+                        y: 0,
+                        transition: { 
+                          delay: index * 0.1,
+                          duration: 0.5 
+                        }
+                      }}
+                    >
                       <div className="relative">
                         <svg className="w-16 h-16">
                           <circle 
@@ -303,33 +337,77 @@ export default function CompanyAIChat() {
                             cx="32" 
                             cy="32"
                           />
-                          <circle 
+                          <motion.circle 
                             className="text-primary stroke-current" 
                             strokeWidth="5" 
-                            strokeDasharray={`${2 * Math.PI * 30 * (analysisScores[category]/100)}, ${2 * Math.PI * 30}`}
+                            initial={{ 
+                              strokeDasharray: `0, ${2 * Math.PI * 30}`,
+                              rotate: -90
+                            }}
+                            animate={{ 
+                              strokeDasharray: `${2 * Math.PI * 30 * (analysisScores[category]/100)}, ${2 * Math.PI * 30}`,
+                              transition: { 
+                                duration: 1,
+                                delay: index * 0.1 + 0.2
+                              }
+                            }}
                             strokeLinecap="round" 
                             stroke="currentColor" 
                             fill="transparent" 
                             r="30" 
                             cx="32" 
                             cy="32"
+                            style={{ transformOrigin: "center", rotate: "-90deg" }}
                           />
                         </svg>
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <span className="text-lg font-bold">{analysisScores[category]}</span>
-                        </div>
+                        <motion.div 
+                          className="absolute inset-0 flex items-center justify-center"
+                          initial={{ opacity: 0 }}
+                          animate={{ 
+                            opacity: 1,
+                            transition: { delay: index * 0.1 + 0.8 } 
+                          }}
+                        >
+                          <motion.span 
+                            className="text-lg font-bold"
+                            initial={{ scale: 0 }}
+                            animate={{ 
+                              scale: 1,
+                              transition: { 
+                                type: "spring",
+                                stiffness: 200,
+                                delay: index * 0.1 + 0.8 
+                              }
+                            }}
+                          >
+                            {analysisScores[category]}
+                          </motion.span>
+                        </motion.div>
                       </div>
                       <h3 className="font-medium mt-1 capitalize">{category}</h3>
-                    </div>
+                    </motion.div>
                   ))}
-                </div>
+                </motion.div>
                 
                 {/* Share Results Component */}
-                <ShareResults 
-                  title={`AI Website Analysis for ${companyUrl}`}
-                  summary={`Our AI analysis found areas of strength and opportunities for improvement on your website.`}
-                  scores={analysisScores}
-                />
+                <motion.div
+                  initial={{ opacity: analysisComplete ? 0 : 1, scale: analysisComplete ? 0.8 : 1 }}
+                  animate={{ 
+                    opacity: 1, 
+                    scale: 1,
+                    transition: { 
+                      delay: 1.5,
+                      type: "spring",
+                      stiffness: 200
+                    }
+                  }}
+                >
+                  <ShareResults 
+                    title={`AI Website Analysis for ${companyUrl}`}
+                    summary={`Our AI analysis found areas of strength and opportunities for improvement on your website.`}
+                    scores={analysisScores}
+                  />
+                </motion.div>
                 
                 <div className="h-[400px] overflow-y-auto p-4 bg-muted/20 rounded-lg space-y-4 border border-primary/10">
                   <AnimatePresence>
