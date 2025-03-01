@@ -1,7 +1,22 @@
 import type { Express } from "express";
 import { createServer } from "http";
 import { storage } from "./storage";
-import { insertMessageSchema, insertSubscriberSchema, insertCompanyWebsiteSchema, insertWebsiteAnalysisSchema, insertUserQuerySchema } from "@shared/schema";
+import { 
+  insertMessageSchema, 
+  insertSubscriberSchema, 
+  insertCompanyWebsiteSchema, 
+  insertWebsiteAnalysisSchema, 
+  insertUserQuerySchema,
+  insertHistoricalAnalysisSchema,
+  insertCompetitorSchema,
+  insertCompetitorAnalysisSchema,
+  insertSeoKeywordSchema,
+  insertPageSpeedInsightSchema,
+  insertSecurityVulnerabilitySchema,
+  insertAnalysisPreferenceSchema,
+  insertScheduledMonitoringSchema,
+  insertContentSuggestionSchema
+} from "@shared/schema";
 import OpenAI from "openai";
 import fetch from 'node-fetch';
 
@@ -188,7 +203,10 @@ export async function registerRoutes(app: Express) {
 
       // Fetch existing analyses for context
       const analyses = await storage.getWebsiteAnalyses(id);
-      const context = analyses.map(analysis => analysis.results.content).join('\n\n');
+      const context = analyses.map(analysis => {
+        const results = analysis.results as AnalysisResult;
+        return results.content;
+      }).join('\n\n');
 
       const response = await openai.chat.completions.create({
         model: "gpt-4",
@@ -318,6 +336,172 @@ export async function registerRoutes(app: Express) {
     } catch (error) {
       console.error('OpenAI API Error:', error);
       res.status(500).json({ error: "Failed to analyze image" });
+    }
+  });
+
+  // Historical Analysis Endpoints
+  app.get("/api/websites/:id/historical", async (req, res) => {
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+      return res.status(400).json({ error: "Invalid website ID" });
+    }
+
+    try {
+      const website = await storage.getCompanyWebsite(id);
+      if (!website) {
+        return res.status(404).json({ error: "Website not found" });
+      }
+
+      const analyses = await storage.getHistoricalAnalyses(id);
+      res.json(analyses);
+    } catch (error) {
+      console.error('Error fetching historical analyses:', error);
+      res.status(500).json({ error: "Failed to fetch historical analyses" });
+    }
+  });
+
+  app.get("/api/websites/:id/historical/latest", async (req, res) => {
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+      return res.status(400).json({ error: "Invalid website ID" });
+    }
+
+    try {
+      const website = await storage.getCompanyWebsite(id);
+      if (!website) {
+        return res.status(404).json({ error: "Website not found" });
+      }
+
+      const analysis = await storage.getLatestHistoricalAnalysis(id);
+      if (!analysis) {
+        return res.status(404).json({ error: "No historical analysis found" });
+      }
+
+      res.json(analysis);
+    } catch (error) {
+      console.error('Error fetching latest historical analysis:', error);
+      res.status(500).json({ error: "Failed to fetch latest historical analysis" });
+    }
+  });
+
+  app.post("/api/websites/:id/historical", async (req, res) => {
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+      return res.status(400).json({ error: "Invalid website ID" });
+    }
+
+    const result = insertHistoricalAnalysisSchema.safeParse({
+      ...req.body,
+      websiteId: id
+    });
+
+    if (!result.success) {
+      return res.status(400).json({ error: "Invalid historical analysis data" });
+    }
+
+    try {
+      const website = await storage.getCompanyWebsite(id);
+      if (!website) {
+        return res.status(404).json({ error: "Website not found" });
+      }
+
+      // Get existing analyses to calculate the change from previous
+      const latestAnalysis = await storage.getLatestHistoricalAnalysis(id);
+      let changeFromPrevious = null;
+
+      if (latestAnalysis) {
+        const current = {
+          performanceScore: result.data.performanceScore,
+          seoScore: result.data.seoScore,
+          accessibilityScore: result.data.accessibilityScore,
+          securityScore: result.data.securityScore,
+          overallScore: result.data.overallScore
+        };
+
+        const previous = {
+          performanceScore: latestAnalysis.performanceScore,
+          seoScore: latestAnalysis.seoScore,
+          accessibilityScore: latestAnalysis.accessibilityScore,
+          securityScore: latestAnalysis.securityScore,
+          overallScore: latestAnalysis.overallScore
+        };
+
+        // Calculate changes and create a delta object
+        changeFromPrevious = {
+          performanceScoreDelta: (current.performanceScore || 0) - (previous.performanceScore || 0),
+          seoScoreDelta: (current.seoScore || 0) - (previous.seoScore || 0),
+          accessibilityScoreDelta: (current.accessibilityScore || 0) - (previous.accessibilityScore || 0),
+          securityScoreDelta: (current.securityScore || 0) - (previous.securityScore || 0),
+          overallScoreDelta: (current.overallScore || 0) - (previous.overallScore || 0),
+          snapshotDate: latestAnalysis.snapshotDate
+        };
+      }
+
+      // Use AI to generate insights based on the changes
+      let insights = "";
+      if (changeFromPrevious) {
+        try {
+          const response = await openai.chat.completions.create({
+            model: "gpt-4",
+            messages: [
+              {
+                role: "system",
+                content: "You are a website analytics expert. Provide concise insights based on changes in website performance metrics. Focus on explaining improvements or declines and suggesting actionable next steps."
+              },
+              {
+                role: "user",
+                content: `Generate insights for website ${website.url} based on these score changes:
+                Performance: ${changeFromPrevious.performanceScoreDelta > 0 ? '+' : ''}${changeFromPrevious.performanceScoreDelta}
+                SEO: ${changeFromPrevious.seoScoreDelta > 0 ? '+' : ''}${changeFromPrevious.seoScoreDelta}
+                Accessibility: ${changeFromPrevious.accessibilityScoreDelta > 0 ? '+' : ''}${changeFromPrevious.accessibilityScoreDelta}
+                Security: ${changeFromPrevious.securityScoreDelta > 0 ? '+' : ''}${changeFromPrevious.securityScoreDelta}
+                Overall: ${changeFromPrevious.overallScoreDelta > 0 ? '+' : ''}${changeFromPrevious.overallScoreDelta}`
+              }
+            ],
+            max_tokens: 200
+          });
+          
+          insights = response.choices[0].message.content || "";
+        } catch (error) {
+          console.error('Error generating insights:', error);
+          insights = "Unable to generate insights for these changes.";
+        }
+      } else {
+        insights = "This is the first snapshot for this website. Future snapshots will show changes over time.";
+      }
+
+      const analysis = await storage.createHistoricalAnalysis({
+        ...result.data,
+        changeFromPrevious,
+        insights,
+        websiteId: id
+      });
+
+      res.json(analysis);
+    } catch (error) {
+      console.error('Error creating historical analysis:', error);
+      res.status(500).json({ error: "Failed to create historical analysis" });
+    }
+  });
+
+  // Competitor Analysis Endpoints
+  app.get("/api/websites/:id/competitors", async (req, res) => {
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+      return res.status(400).json({ error: "Invalid website ID" });
+    }
+
+    try {
+      const website = await storage.getCompanyWebsite(id);
+      if (!website) {
+        return res.status(404).json({ error: "Website not found" });
+      }
+
+      const competitors = await storage.getCompetitors(id);
+      res.json(competitors);
+    } catch (error) {
+      console.error('Error fetching competitors:', error);
+      res.status(500).json({ error: "Failed to fetch competitors" });
     }
   });
 
