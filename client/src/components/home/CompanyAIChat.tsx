@@ -1,14 +1,27 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Globe, Search, Zap, CheckCircle, LoaderCircle, SendIcon, AlertTriangle, BarChart } from "lucide-react";
+import { 
+  Globe, 
+  Search, 
+  Zap, 
+  CheckCircle, 
+  LoaderCircle, 
+  SendIcon, 
+  AlertTriangle, 
+  BarChart, 
+  TrendingUp, 
+  LineChart,
+  GitCompareIcon 
+} from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useLoading } from "@/hooks/use-loading";
 import ShareResults from "@/components/common/ShareResults";
+import HistoricalAnalysisChart from "./HistoricalAnalysisChart";
 
 // Different analysis types
 type AnalysisCategory = 'performance' | 'seo' | 'accessibility' | 'security';
