@@ -227,6 +227,10 @@ export default function CompanyAIChat() {
               <Search className="mr-2 h-4 w-4" />
               AI Insights
             </TabsTrigger>
+            <TabsTrigger value="history" className="flex-1" disabled={!isTrained}>
+              <LineChart className="mr-2 h-4 w-4" />
+              Historical
+            </TabsTrigger>
           </TabsList>
           
           <TabsContent value="analyze" className="space-y-6">
@@ -467,6 +471,21 @@ export default function CompanyAIChat() {
                   </Button>
                 </form>
               </>
+            )}
+          </TabsContent>
+          
+          <TabsContent value="history" className="space-y-6">
+            {isTrained && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <HistoricalAnalysisChart 
+                  websiteId={1} // For demo purposes, using a static ID
+                  websiteUrl={companyUrl || "example.com"} 
+                />
+              </motion.div>
             )}
           </TabsContent>
         </Tabs>

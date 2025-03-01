@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
-import { apiRequest, getQueryFn, queryClient } from "@/lib/queryClient";
+import { queryClient } from "@/lib/queryClient";
 import { motion } from "framer-motion";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { CalendarIcon, TrendingUpIcon, TrendingDownIcon, BarChart2Icon, AlertTriangleIcon, ArrowUpIcon, ArrowDownIcon, EyeIcon, LockIcon, SearchIcon, LayoutIcon } from 'lucide-react';
@@ -43,13 +43,14 @@ interface HistoricalAnalysisChartProps {
 }
 
 export default function HistoricalAnalysisChart({ websiteId, websiteUrl }: HistoricalAnalysisChartProps) {
+  // UI state
   const [selectedMetric, setSelectedMetric] = useState<string>('overall');
   const [timeframe, setTimeframe] = useState<string>('all');
-  const [loading, setLoading] = useState(false);
+  const [creatingSnapshot, setCreatingSnapshot] = useState(false);
   const { toast } = useToast();
 
-  // Using react-query to fetch historical data
-  const { data: historicalData = [], isLoading } = useQuery({
+  // Fetch historical data
+  const { data: analysisData = [], isLoading } = useQuery({
     queryKey: [`/api/websites/${websiteId}/historical`],
     queryFn: async () => {
       if (!websiteId) return [];
@@ -72,10 +73,10 @@ export default function HistoricalAnalysisChart({ websiteId, websiteUrl }: Histo
 
   // Filter data based on timeframe
   const filteredData = (() => {
-    if (!historicalData.length) return [];
+    if (!analysisData.length) return [];
     
     // Sort data by date
-    const sortedData = [...historicalData].sort((a, b) => 
+    const sortedData = [...analysisData].sort((a, b) => 
       new Date(a.snapshotDate).getTime() - new Date(b.snapshotDate).getTime()
     );
     
@@ -111,16 +112,15 @@ export default function HistoricalAnalysisChart({ websiteId, websiteUrl }: Histo
   }));
 
   // Get the latest analysis data
-  const latestSnapshot = historicalData.length > 0 
-    ? [...historicalData].sort((a, b) => 
+  const latestSnapshot = analysisData.length > 0 
+    ? [...analysisData].sort((a, b) => 
         new Date(b.snapshotDate).getTime() - new Date(a.snapshotDate).getTime()
       )[0] 
     : null;
 
   // Generate a random analysis if none exists (for demo purposes)
-  const [loading, setLoading] = useState(false);
   const createDemoAnalysis = async () => {
-    setLoading(true);
+    setCreatingSnapshot(true);
     try {
       const demoData = {
         performanceScore: Math.floor(Math.random() * 30) + 70,
@@ -157,7 +157,7 @@ export default function HistoricalAnalysisChart({ websiteId, websiteUrl }: Histo
         variant: "destructive",
       });
     } finally {
-      setLoading(false);
+      setCreatingSnapshot(false);
     }
   };
 
@@ -213,9 +213,9 @@ export default function HistoricalAnalysisChart({ websiteId, websiteUrl }: Histo
             variant="outline" 
             size="sm" 
             onClick={createDemoAnalysis}
-            disabled={loading}
+            disabled={creatingSnapshot}
           >
-            {loading ? "Creating..." : "Create New Snapshot"}
+            {creatingSnapshot ? "Creating..." : "Create New Snapshot"}
           </Button>
         </CardTitle>
         <CardDescription>
@@ -223,11 +223,15 @@ export default function HistoricalAnalysisChart({ websiteId, websiteUrl }: Histo
         </CardDescription>
       </CardHeader>
       <CardContent>
-        {historicalData.length === 0 ? (
+        {isLoading ? (
+          <div className="flex justify-center items-center py-12">
+            <div className="animate-spin h-10 w-10 border-4 border-primary/20 border-t-primary rounded-full"></div>
+          </div>
+        ) : analysisData.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-muted-foreground mb-4">No historical data available yet</p>
-            <Button onClick={createDemoAnalysis} disabled={loading}>
-              {loading ? "Creating..." : "Generate First Snapshot"}
+            <Button onClick={createDemoAnalysis} disabled={creatingSnapshot}>
+              {creatingSnapshot ? "Creating..." : "Generate First Snapshot"}
             </Button>
           </div>
         ) : (
