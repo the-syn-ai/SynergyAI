@@ -1,8 +1,50 @@
-import { companyWebsites, websiteAnalysis, userQueries } from "@shared/schema";
-import type { CompanyWebsite, WebsiteAnalysis, UserQuery } from "@shared/schema";
-import type { InsertCompanyWebsite, InsertWebsiteAnalysis, InsertUserQuery } from "@shared/schema";
+import { 
+  companyWebsites, 
+  websiteAnalysis, 
+  userQueries,
+  historicalAnalysis,
+  competitors,
+  competitorAnalysis,
+  seoKeywords,
+  pageSpeedInsights,
+  securityVulnerabilities,
+  analysisPreferences,
+  scheduledMonitoring,
+  contentSuggestions
+} from "@shared/schema";
+
+import type { 
+  CompanyWebsite, 
+  WebsiteAnalysis, 
+  UserQuery,
+  HistoricalAnalysis,
+  Competitor,
+  CompetitorAnalysis,
+  SeoKeyword,
+  PageSpeedInsight,
+  SecurityVulnerability,
+  AnalysisPreference,
+  ScheduledMonitoring,
+  ContentSuggestion
+} from "@shared/schema";
+
+import type { 
+  InsertCompanyWebsite, 
+  InsertWebsiteAnalysis, 
+  InsertUserQuery,
+  InsertHistoricalAnalysis,
+  InsertCompetitor,
+  InsertCompetitorAnalysis,
+  InsertSeoKeyword,
+  InsertPageSpeedInsight,
+  InsertSecurityVulnerability,
+  InsertAnalysisPreference,
+  InsertScheduledMonitoring,
+  InsertContentSuggestion
+} from "@shared/schema";
+
 import { db } from "./db";
-import { eq } from "drizzle-orm";
+import { eq, desc, and, or, asc } from "drizzle-orm";
 import { users, type User, type InsertUser } from "@shared/schema";
 import { posts, type Post, type InsertPost, messages, type Message, type InsertMessage, subscribers, type Subscriber, type InsertSubscriber } from "@shared/schema";
 
