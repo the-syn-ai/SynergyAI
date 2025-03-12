@@ -38,13 +38,14 @@ export default function Hero() {
             }}
             className="z-10"
           >
-            <motion.h1 
+            <motion.div 
               variants={textVariants}
-              className="text-4xl md:text-5xl font-bold leading-tight mb-6"
             >
-              Power Your Business with{" "}
-              <span className="text-primary bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">SynergyAI</span> Solutions
-            </motion.h1>
+              <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-6">
+                Power Your Business with{" "}
+                <span className="text-primary bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">SynergyAI</span> Solutions
+              </h1>
+            </motion.div>
 
             <motion.p 
               variants={textVariants}
