@@ -41,33 +41,23 @@ export default function Navbar() {
                   <NavigationMenuTrigger className="text-base md:text-lg font-medium">Services</NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <div className="grid gap-3 p-4 w-[300px] md:w-[400px]">
-                      <Link href="/services#automation">
-                        <a className="block p-3 hover:bg-accent rounded-md text-base">
-                          Business Automation
-                        </a>
+                      <Link href="/services#automation" className="block p-3 hover:bg-accent rounded-md text-base">
+                        Business Automation
                       </Link>
-                      <Link href="/services#web">
-                        <a className="block p-3 hover:bg-accent rounded-md text-base">
-                          Web Design & Hosting
-                        </a>
+                      <Link href="/services#web" className="block p-3 hover:bg-accent rounded-md text-base">
+                        Web Design & Hosting
                       </Link>
-                      <Link href="/services#crm">
-                        <a className="block p-3 hover:bg-accent rounded-md text-base">
-                          CRM Solutions
-                        </a>
+                      <Link href="/services#crm" className="block p-3 hover:bg-accent rounded-md text-base">
+                        CRM Solutions
                       </Link>
                     </div>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <Link href="/pricing">
-                    <a className="px-3 md:px-5 py-2 hover:text-primary text-base md:text-lg font-medium">Pricing</a>
-                  </Link>
+                  <Link href="/pricing" className="px-3 md:px-5 py-2 hover:text-primary text-base md:text-lg font-medium">Pricing</Link>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <Link href="/blog">
-                    <a className="px-3 md:px-5 py-2 hover:text-primary text-base md:text-lg font-medium">Blog</a>
-                  </Link>
+                  <Link href="/blog" className="px-3 md:px-5 py-2 hover:text-primary text-base md:text-lg font-medium">Blog</Link>
                 </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
