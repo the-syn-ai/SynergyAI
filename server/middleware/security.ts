@@ -88,7 +88,8 @@ export const errorLogger = (err: Error, req: Request, res: Response, next: NextF
 
 // Input validation middleware
 export const validateRequestBody = (req: Request, res: Response, next: NextFunction) => {
-  if (!req.is('application/json')) {
+  // Only validate Content-Type for methods that typically have a body
+  if (['POST', 'PUT', 'PATCH'].includes(req.method) && !req.is('application/json')) {
     return res.status(415).json({ error: 'Content-Type must be application/json' });
   }
   next();
