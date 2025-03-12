@@ -11,11 +11,29 @@ export const users = pgTable("users", {
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
+// Create post categories table
+export const postCategories = pgTable("post_categories", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 100 }).notNull().unique(),
+  slug: varchar("slug", { length: 100 }).notNull().unique(),
+  description: text("description"),
+  parentId: integer("parent_id"), // Self-reference will be used later with a query
+  createdAt: timestamp("created_at").defaultNow().notNull()
+});
+
 export const posts = pgTable("posts", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
+  slug: varchar("slug", { length: 150 }).notNull().unique(),
+  excerpt: text("excerpt").notNull(),
   content: text("content").notNull(),
   image: text("image").notNull(),
+  categoryId: integer("category_id").references(() => postCategories.id),
+  metaTitle: text("meta_title"),
+  metaDescription: text("meta_description"),
+  keywords: text("keywords").array(),
+  publishedAt: timestamp("published_at"),
+  status: varchar("status", { length: 20 }).notNull().default("draft"),
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
@@ -217,6 +235,7 @@ export const contentSuggestions = pgTable("content_suggestions", {
   createdAt: timestamp("created_at").defaultNow().notNull()
 });
 
+export const insertPostCategorySchema = createInsertSchema(postCategories).omit({ id: true, createdAt: true });
 export const insertPostSchema = createInsertSchema(posts).omit({ id: true, createdAt: true });
 export const insertMessageSchema = createInsertSchema(messages).omit({ id: true, createdAt: true });
 export const insertSubscriberSchema = createInsertSchema(subscribers).omit({ id: true, createdAt: true });
@@ -244,6 +263,7 @@ export const insertScheduledMonitoringSchema = createInsertSchema(scheduledMonit
 export const insertContentSuggestionSchema = createInsertSchema(contentSuggestions).omit({ id: true, createdAt: true });
 
 // Export types
+export type PostCategory = typeof postCategories.$inferSelect;
 export type Post = typeof posts.$inferSelect;
 export type Message = typeof messages.$inferSelect;
 export type Subscriber = typeof subscribers.$inferSelect;
@@ -268,6 +288,7 @@ export type AnalysisPreference = typeof analysisPreferences.$inferSelect;
 export type ScheduledMonitoring = typeof scheduledMonitoring.$inferSelect;
 export type ContentSuggestion = typeof contentSuggestions.$inferSelect;
 
+export type InsertPostCategory = z.infer<typeof insertPostCategorySchema>;
 export type InsertPost = z.infer<typeof insertPostSchema>;
 export type InsertMessage = z.infer<typeof insertMessageSchema>;
 export type InsertSubscriber = z.infer<typeof insertSubscriberSchema>;

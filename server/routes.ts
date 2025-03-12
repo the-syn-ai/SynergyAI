@@ -55,9 +55,44 @@ interface AnalysisResult {
 }
 
 export async function registerRoutes(app: Express) {
-  app.get("/api/posts", async (_req, res) => {
-    const posts = await storage.getPosts();
+  // Blog and Post Category endpoints
+  app.get("/api/posts", async (req, res) => {
+    const categoryId = req.query.categoryId ? Number(req.query.categoryId) : undefined;
+    
+    let posts;
+    if (categoryId) {
+      posts = await storage.getPostsByCategory(categoryId);
+    } else {
+      posts = await storage.getPosts();
+    }
+    
     res.json(posts);
+  });
+  
+  app.get("/api/posts/:slug", async (req, res) => {
+    const post = await storage.getPostBySlug(req.params.slug);
+    if (!post) {
+      return res.status(404).json({ error: "Post not found" });
+    }
+    res.json(post);
+  });
+  
+  app.get("/api/post-categories", async (_req, res) => {
+    const categories = await storage.getPostCategories();
+    res.json(categories);
+  });
+  
+  app.get("/api/post-categories/root", async (_req, res) => {
+    const rootCategories = await storage.getRootPostCategories();
+    res.json(rootCategories);
+  });
+  
+  app.get("/api/post-categories/:slug", async (req, res) => {
+    const category = await storage.getPostCategoryBySlug(req.params.slug);
+    if (!category) {
+      return res.status(404).json({ error: "Category not found" });
+    }
+    res.json(category);
   });
 
   app.post("/api/contact", async (req, res) => {

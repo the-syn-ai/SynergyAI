@@ -10,7 +10,8 @@ import {
   securityVulnerabilities,
   analysisPreferences,
   scheduledMonitoring,
-  contentSuggestions
+  contentSuggestions,
+  postCategories
 } from "@shared/schema";
 
 import type { 
@@ -25,7 +26,8 @@ import type {
   SecurityVulnerability,
   AnalysisPreference,
   ScheduledMonitoring,
-  ContentSuggestion
+  ContentSuggestion,
+  PostCategory
 } from "@shared/schema";
 
 import type { 
@@ -40,11 +42,12 @@ import type {
   InsertSecurityVulnerability,
   InsertAnalysisPreference,
   InsertScheduledMonitoring,
-  InsertContentSuggestion
+  InsertContentSuggestion,
+  InsertPostCategory
 } from "@shared/schema";
 
 import { db } from "./db";
-import { eq, desc, and, or, asc } from "drizzle-orm";
+import { eq, desc, and, or, asc, isNull } from "drizzle-orm";
 import { users, type User, type InsertUser } from "@shared/schema";
 import { posts, type Post, type InsertPost, messages, type Message, type InsertMessage, subscribers, type Subscriber, type InsertSubscriber } from "@shared/schema";
 
@@ -52,7 +55,19 @@ export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
+  
+  // Blog and content methods
   getPosts(): Promise<Post[]>;
+  getPostsByCategory(categoryId: number): Promise<Post[]>;
+  getPostBySlug(slug: string): Promise<Post | undefined>;
+  createPost(post: InsertPost): Promise<Post>;
+  getPostCategories(): Promise<PostCategory[]>;
+  getRootPostCategories(): Promise<PostCategory[]>;
+  getPostCategoryBySlug(slug: string): Promise<PostCategory | undefined>;
+  getPostCategory(id: number): Promise<PostCategory | undefined>;
+  createPostCategory(category: InsertPostCategory): Promise<PostCategory>;
+  
+  // Contact and newsletter methods
   createMessage(message: InsertMessage): Promise<Message>;
   createSubscriber(subscriber: InsertSubscriber): Promise<Subscriber>;
 
@@ -124,10 +139,61 @@ export class DatabaseStorage implements IStorage {
     return result;
   }
 
+  // Post and Blog methods
   async getPosts(): Promise<Post[]> {
-    return db.select().from(posts);
+    return db.select().from(posts).orderBy(desc(posts.publishedAt));
+  }
+  
+  async getPostsByCategory(categoryId: number): Promise<Post[]> {
+    return db.select()
+      .from(posts)
+      .where(eq(posts.categoryId, categoryId))
+      .orderBy(desc(posts.publishedAt));
+  }
+  
+  async getPostBySlug(slug: string): Promise<Post | undefined> {
+    const [result] = await db.select()
+      .from(posts)
+      .where(eq(posts.slug, slug));
+    return result;
+  }
+  
+  async createPost(post: InsertPost): Promise<Post> {
+    const [result] = await db.insert(posts).values(post).returning();
+    return result;
+  }
+  
+  async getPostCategories(): Promise<PostCategory[]> {
+    return db.select().from(postCategories).orderBy(asc(postCategories.name));
+  }
+  
+  async getRootPostCategories(): Promise<PostCategory[]> {
+    return db.select()
+      .from(postCategories)
+      .where(isNull(postCategories.parentId))
+      .orderBy(asc(postCategories.name));
+  }
+  
+  async getPostCategoryBySlug(slug: string): Promise<PostCategory | undefined> {
+    const [result] = await db.select()
+      .from(postCategories)
+      .where(eq(postCategories.slug, slug));
+    return result;
+  }
+  
+  async getPostCategory(id: number): Promise<PostCategory | undefined> {
+    const [result] = await db.select()
+      .from(postCategories)
+      .where(eq(postCategories.id, id));
+    return result;
+  }
+  
+  async createPostCategory(category: InsertPostCategory): Promise<PostCategory> {
+    const [result] = await db.insert(postCategories).values(category).returning();
+    return result;
   }
 
+  // Contact and Newsletter methods
   async createMessage(message: InsertMessage): Promise<Message> {
     const [result] = await db.insert(messages).values(message).returning();
     return result;
