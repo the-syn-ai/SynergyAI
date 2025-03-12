@@ -77,7 +77,7 @@ export default function Dashboard() {
       {/* Main content */}
       <div className="lg:pl-64">
         <div className="container mx-auto px-4 py-8">
-          <h1 className="text-3xl font-bold mb-8">Dashboard</h1>
+          <h1 className="text-4xl font-bold mb-8">Dashboard</h1>
           {/* Dashboard content will be added here */}
         </div>
       </div>
