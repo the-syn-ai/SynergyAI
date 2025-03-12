@@ -122,11 +122,12 @@ export default function Blog() {
 }
 
 function PostCard({ post, categoryName }: { post: Post, categoryName: string }) {
-  const formatDate = (dateString: string | null | undefined) => {
+  const formatDate = (dateString: string | Date | null | undefined) => {
     if (!dateString) return "";
     // Convert string date to Date object and format it
     try {
-      return format(new Date(dateString), "MMMM d, yyyy");
+      const date = dateString instanceof Date ? dateString : new Date(dateString);
+      return format(date, "MMMM d, yyyy");
     } catch (e) {
       return "";
     }

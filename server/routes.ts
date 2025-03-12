@@ -241,6 +241,38 @@ export async function registerRoutes(app: Express) {
       res.status(500).json({ error: "Failed to seed categories" });
     }
   });
+  
+  // Admin endpoint to seed blog posts
+  app.post("/api/seed/posts", async (_req, res) => {
+    try {
+      // Execute the seed-posts script directly
+      const { execFile } = await import('child_process');
+      
+      execFile('node', ['scripts/seed-posts.mjs'], (error, stdout, stderr) => {
+        if (error) {
+          console.error('Error executing seed-posts script:', error);
+          return res.status(500).json({ error: 'Failed to seed posts', details: error.message });
+        }
+        
+        if (stderr) {
+          console.error('Seed script stderr:', stderr);
+        }
+        
+        // Extract information from stdout
+        const createdMatch = stdout.match(/Created (\d+) posts/);
+        const createdCount = createdMatch ? parseInt(createdMatch[1]) : 0;
+        
+        res.json({
+          message: "Posts seeded successfully",
+          created: createdCount,
+          details: stdout
+        });
+      });
+    } catch (error) {
+      console.error("Error seeding posts:", error);
+      res.status(500).json({ error: "Failed to seed posts" });
+    }
+  });
 
   app.post("/api/contact", async (req, res) => {
     const result = insertMessageSchema.safeParse(req.body);
