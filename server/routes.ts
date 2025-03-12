@@ -94,6 +94,153 @@ export async function registerRoutes(app: Express) {
     }
     res.json(category);
   });
+  
+  // Admin endpoint to seed initial post categories
+  app.post("/api/seed/categories", async (_req, res) => {
+    try {
+      // Categories based on main services offered by the company
+      const serviceCategories = [
+        {
+          name: "GHL Integration",
+          description: "Insights and guides on GoHighLevel platform integration and setup.",
+          slug: "ghl-integration",
+          parentId: null
+        },
+        {
+          name: "Web Design",
+          description: "Professional web design tips, trends, and best practices.",
+          slug: "web-design",
+          parentId: null
+        },
+        {
+          name: "CRM Solutions",
+          description: "Custom CRM development, automation, and integration guides.",
+          slug: "crm-solutions",
+          parentId: null
+        },
+        {
+          name: "Email Automation",
+          description: "Email marketing automation strategies and implementation guides.",
+          slug: "email-automation",
+          parentId: null
+        },
+        {
+          name: "AI Technology",
+          description: "Insights on AI call bots, review management, and other AI solutions.",
+          slug: "ai-technology",
+          parentId: null
+        }
+      ];
+      
+      const createdCategories = [];
+      
+      // Insert main categories first
+      for (const category of serviceCategories) {
+        try {
+          const existing = await storage.getPostCategoryBySlug(category.slug);
+          
+          if (!existing) {
+            const newCategory = await storage.createPostCategory(category);
+            createdCategories.push(newCategory);
+          }
+        } catch (error) {
+          console.error(`Error processing category ${category.name}:`, error);
+        }
+      }
+      
+      // Get all categories to use their IDs for subcategories
+      const allCategories = await storage.getPostCategories();
+      
+      // Create a map of slugs to IDs for easy lookup
+      const categoryMap = allCategories.reduce((acc, cat) => {
+        acc[cat.slug] = cat.id;
+        return acc;
+      }, {} as Record<string, number>);
+      
+      // Subcategories with their parent slugs
+      const subCategories = [
+        {
+          name: "Workflow Automation",
+          description: "Automating business processes with custom workflows.",
+          slug: "workflow-automation",
+          parentSlug: "ghl-integration"
+        },
+        {
+          name: "Sales Funnel Creation",
+          description: "Building effective sales funnels that convert.",
+          slug: "sales-funnel-creation",
+          parentSlug: "ghl-integration"
+        },
+        {
+          name: "Responsive Design",
+          description: "Creating websites that work on all devices and screen sizes.",
+          slug: "responsive-design",
+          parentSlug: "web-design"
+        },
+        {
+          name: "SEO Optimization",
+          description: "Strategies to improve search engine visibility and rankings.",
+          slug: "seo-optimization",
+          parentSlug: "web-design"
+        },
+        {
+          name: "Lead Management",
+          description: "Tools and techniques for effective lead tracking and management.",
+          slug: "lead-management",
+          parentSlug: "crm-solutions"
+        },
+        {
+          name: "Campaign Creation",
+          description: "Building effective email marketing campaigns.",
+          slug: "campaign-creation",
+          parentSlug: "email-automation"
+        },
+        {
+          name: "AI Call Bots",
+          description: "Using AI for intelligent call handling and customer service.",
+          slug: "ai-call-bots",
+          parentSlug: "ai-technology"
+        },
+        {
+          name: "Review Management",
+          description: "AI-powered review collection and response systems.",
+          slug: "review-management",
+          parentSlug: "ai-technology"
+        }
+      ];
+      
+      // Insert subcategories
+      for (const subCategory of subCategories) {
+        try {
+          const existing = await storage.getPostCategoryBySlug(subCategory.slug);
+          
+          if (!existing) {
+            const parentId = categoryMap[subCategory.parentSlug];
+            if (parentId) {
+              const newSubCategory = await storage.createPostCategory({
+                name: subCategory.name,
+                description: subCategory.description,
+                slug: subCategory.slug,
+                parentId
+              });
+              createdCategories.push(newSubCategory);
+            }
+          }
+        } catch (error) {
+          console.error(`Error processing subcategory ${subCategory.name}:`, error);
+        }
+      }
+      
+      res.json({ 
+        message: "Categories seeded successfully", 
+        created: createdCategories.length,
+        categories: createdCategories
+      });
+    } catch (error) {
+      console.error("Error seeding categories:", error);
+      res.status(500).json({ error: "Failed to seed categories" });
+    }
+  });
 
   app.post("/api/contact", async (req, res) => {
     const result = insertMessageSchema.safeParse(req.body);

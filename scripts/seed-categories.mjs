@@ -1,7 +1,18 @@
 // Seed script for creating initial blog post categories based on services
-// Using ES Modules syntax
-import { db } from '../server/db.js';
+// Using ESM syntax for better compatibility
+import { drizzle } from 'drizzle-orm/postgres-js';
+import postgres from 'postgres';
 import { postCategories } from '../shared/schema.js';
+
+// Create a new postgres connection and drizzle instance for this script
+const connectionString = process.env.DATABASE_URL;
+if (!connectionString) {
+  console.error("DATABASE_URL environment variable is required");
+  process.exit(1);
+}
+
+const client = postgres(connectionString);
+const db = drizzle(client);
 
 // Function to create slug from name
 function slugify(text) {
