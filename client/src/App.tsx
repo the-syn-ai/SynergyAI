@@ -4,6 +4,7 @@ import { queryClient } from "./lib/queryClient";
 import { Toaster } from "@/components/ui/toaster";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import FeatureSuggestion from "@/components/ai/FeatureSuggestion";
 import Home from "@/pages/Home";
 import Blog from "@/pages/Blog";
 import Services from "@/pages/Services";
@@ -47,6 +48,8 @@ function App() {
             <Router />
           </main>
           <Footer />
+          {/* AI-powered feature suggestion sidebar */}
+          <FeatureSuggestion />
         </div>
         <Toaster />
       </LoadingProvider>

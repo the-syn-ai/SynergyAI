@@ -1,4 +1,12 @@
-export { default as PageTransition } from './PageTransition';
-export { default as ElementTransition } from './ElementTransition';
-export { default as StaggeredContainer, StaggeredItem } from './StaggeredContainer';
-export { default as LoadingAnimation } from './LoadingAnimation';
+import PageTransition from './PageTransition';
+import ElementTransition from './ElementTransition';
+import StaggeredContainer, { StaggeredItem } from './StaggeredContainer';
+import LoadingAnimation from './LoadingAnimation';
+
+export {
+  PageTransition,
+  ElementTransition,
+  StaggeredContainer,
+  StaggeredItem,
+  LoadingAnimation
+};

@@ -10,6 +10,7 @@ export type LoadingStateType = {
   websiteAnalysis: boolean;
   featuresSection: boolean;
   faqSection: boolean;
+  featureSuggestion: boolean;
 };
 
 interface LoadingContextType {
