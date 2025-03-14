@@ -50,8 +50,8 @@ function App() {
           <Footer />
           {/* AI-powered feature suggestion sidebar */}
           <FeatureSuggestion />
+          <Toaster />
         </div>
-        <Toaster />
       </LoadingProvider>
     </QueryClientProvider>
   );

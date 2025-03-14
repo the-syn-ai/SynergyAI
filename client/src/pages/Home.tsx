@@ -12,13 +12,19 @@ export default function Home() {
   const { startLoading, stopLoading } = useLoading();
 
   useEffect(() => {
+    // Set initial loading state
     startLoading('home');
+    
     // Simulate loading delay
     const timer = setTimeout(() => {
       stopLoading('home');
     }, 500);
+    
+    // Cleanup function
     return () => clearTimeout(timer);
-  }, [startLoading, stopLoading]);
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   
   return (
     <PageTransition>

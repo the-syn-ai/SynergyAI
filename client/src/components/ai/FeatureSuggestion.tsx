@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { ElementTransition } from '@/components/animations';
 import { X, Lightbulb, ChevronRight, ChevronLeft, Star, Sparkles } from 'lucide-react';
 import { useLocation } from 'wouter';
+import { useLoading } from '@/hooks/use-loading';
 
 // Types for feature suggestions
 type FeatureSuggestion = {
@@ -117,16 +118,24 @@ export default function FeatureSuggestion() {
   const [location] = useLocation();
   const [suggestions, setSuggestions] = useState<FeatureSuggestion[]>([]);
   const [, setLocation] = useLocation();
+  const { startLoading, stopLoading } = useLoading();
 
   // Update suggestions when location changes
   useEffect(() => {
-    // Delay suggestion update to simulate AI processing
-    const timer = setTimeout(() => {
-      setSuggestions(getPageSuggestions(location));
-    }, 600);
-    
-    return () => clearTimeout(timer);
-  }, [location]);
+    if (isOpen) {
+      // Start loading indicator
+      startLoading('featureSuggestion');
+      setSuggestions([]);
+      
+      // Delay suggestion update to simulate AI processing
+      const timer = setTimeout(() => {
+        setSuggestions(getPageSuggestions(location));
+        stopLoading('featureSuggestion');
+      }, 800);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [location, isOpen, startLoading, stopLoading]);
 
   // Toggle sidebar
   const toggleSidebar = () => {

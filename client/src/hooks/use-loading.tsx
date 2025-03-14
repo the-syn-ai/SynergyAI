@@ -30,7 +30,8 @@ const initialLoadingState: LoadingStateType = {
   about: false,
   websiteAnalysis: false,
   featuresSection: false,
-  faqSection: false
+  faqSection: false,
+  featureSuggestion: false
 };
 
 const LoadingContext = createContext<LoadingContextType | undefined>(undefined);
