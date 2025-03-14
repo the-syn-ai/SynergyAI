@@ -59,6 +59,19 @@ export default function Navbar() {
                 <NavigationMenuItem>
                   <Link href="/blog" className="px-3 md:px-5 py-2 hover:text-primary text-base md:text-lg font-medium">Blog</Link>
                 </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <a 
+                    href="/about" 
+                    className="px-3 md:px-5 py-2 hover:text-primary text-base md:text-lg font-medium"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setLocation("/about");
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }}
+                  >
+                    About
+                  </a>
+                </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
           </div>

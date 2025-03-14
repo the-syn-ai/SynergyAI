@@ -12,6 +12,9 @@ export default function About() {
   const { startLoading, stopLoading } = useLoading();
 
   useEffect(() => {
+    // Scroll to top when component mounts
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
     startLoading('about');
     // Simulate loading delay
     const timer = setTimeout(() => {

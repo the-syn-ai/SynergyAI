@@ -1,6 +1,7 @@
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 
 export default function Footer() {
+  const [, setLocation] = useLocation();
   return (
     <footer className="bg-background border-t mt-20">
       <div className="container mx-auto px-4 py-12">
@@ -24,7 +25,19 @@ export default function Footer() {
           <div>
             <h4 className="text-sm font-semibold mb-4">Company</h4>
             <ul className="space-y-2">
-              <li><Link href="/about">About</Link></li>
+              <li>
+                <a 
+                  href="/about" 
+                  className="cursor-pointer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setLocation("/about");
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                >
+                  About
+                </a>
+              </li>
               <li><Link href="/blog">Blog</Link></li>
               <li><Link href="/contact">Contact</Link></li>
             </ul>
