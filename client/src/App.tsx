@@ -9,6 +9,7 @@ import Blog from "@/pages/Blog";
 import Services from "@/pages/Services";
 import Contact from "@/pages/Contact";
 import Pricing from "@/pages/Pricing";
+import About from "@/pages/About";
 import Dashboard from "@/pages/admin/Dashboard";
 import NotFound from "@/pages/not-found";
 import { useEffect } from "react";
@@ -29,6 +30,7 @@ function Router() {
       <Route path="/services" component={Services} />
       <Route path="/pricing" component={Pricing} />
       <Route path="/contact" component={Contact} />
+      <Route path="/about" component={About} />
       <Route path="/admin/dashboard" component={Dashboard} />
       <Route component={NotFound} />
     </Switch>

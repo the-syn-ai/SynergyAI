@@ -6,6 +6,7 @@ export type LoadingStateType = {
   blog: boolean;
   contact: boolean;
   pricing: boolean;
+  about: boolean;
   websiteAnalysis: boolean;
   featuresSection: boolean;
   faqSection: boolean;
@@ -25,6 +26,7 @@ const initialLoadingState: LoadingStateType = {
   blog: false,
   contact: false,
   pricing: false,
+  about: false,
   websiteAnalysis: false,
   featuresSection: false,
   faqSection: false
