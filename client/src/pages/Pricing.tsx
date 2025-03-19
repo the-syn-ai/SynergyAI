@@ -10,10 +10,10 @@ const plans = [
     name: "STARTER PLAN",
     setup: "1,000",
     price: "197",
-    subtitle: "For Small Businesses & Startups",
+    subtitle: "",
     description: "Get started with a sleek, mobile-friendly website designed to capture leads and improve your online presence.",
     features: [
-      "3-Page Website",
+      "5-Page Website",
       "SEO Optimization & Basic Keyword Research",
       "Lead Capture Forms & Landing Pages",
       "AI Chatbot (Basic)",
@@ -26,10 +26,10 @@ const plans = [
     name: "GROWTH PLAN",
     setup: "2,000",
     price: "397",
-    subtitle: "For Scaling Businesses & Entrepreneurs",
+    subtitle: "",
     description: "Scale your business with advanced SEO, automation, and lead management tools to maximize conversions.",
     features: [
-      "5-Page Website",
+      "10-Page Website",
       "Everything in Starter, PLUS:",
       "Advanced SEO & Content Strategy",
       "CRM Integration for Lead Management",
@@ -43,10 +43,10 @@ const plans = [
     name: "ELITE PLAN",
     setup: "3,000",
     price: "697",
-    subtitle: "For High-Performing Brands & Enterprises",
+    subtitle: "",
     description: "Unlock full automation, premium customization, and enterprise-level solutions for high-growth businesses.",
     features: [
-      "10-Page Website",
+      "20+ Page Website",
       "Everything in Growth, PLUS:",
       "Full AI-Driven Automation & Smart Workflows",
       "E-Commerce & Payment Integration",
@@ -122,8 +122,7 @@ export default function Pricing() {
           >
             <Card className="h-full backdrop-blur-sm bg-card/80 border-primary/10 hover:border-primary/20 transition-colors">
               <CardHeader className="text-center">
-                <CardTitle className="text-2xl font-bold mb-1">{plan.name}</CardTitle>
-                <p className="text-sm mb-4 text-muted-foreground">{plan.subtitle}</p>
+                <CardTitle className="text-2xl font-bold mb-4">{plan.name}</CardTitle>
                 <div className="py-3 bg-primary/10 rounded-md mb-4">
                   <div className="text-center">
                     <span className="text-xl font-semibold">${plan.setup} Setup</span>
