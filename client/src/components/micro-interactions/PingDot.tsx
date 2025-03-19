@@ -43,7 +43,7 @@ export default function PingDot({
         duration: pingDuration,
         ease: easings.easeOut,
         repeat: count,
-        repeatType: 'loop',
+        repeatType: "loop" as const,
         repeatDelay: 0.5
       }
     }

@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Globe, Box, Mail, Phone, MessageSquare, Star } from "lucide-react";
 import { FeaturesSectionSkeleton } from "@/components/ui/loading-skeleton";
+import { HoverCard, FadeInText, BouncingIcon, AnimatedUnderline } from "@/components/micro-interactions";
 
 const features = [
   {
@@ -64,17 +65,26 @@ export default function Features() {
   return (
     <section className="py-20 bg-gradient-to-b from-background to-muted/50">
       <div className="container mx-auto px-4">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+        <FadeInText 
           className="text-center mb-12"
+          direction="up"
+          duration="normal"
         >
-          <h2 className="text-3xl font-bold mb-4">Our Services</h2>
+          <h2 className="text-3xl font-bold mb-4">
+            <AnimatedUnderline 
+              underlineColor="bg-primary/60" 
+              underlineHeight={3} 
+              underlineRadius={4}
+              duration="slow"
+              className="px-2"
+            >
+              Our Services
+            </AnimatedUnderline>
+          </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Comprehensive AI-powered solutions designed to transform your business operations and drive growth through automation
           </p>
-        </motion.div>
+        </FadeInText>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((feature, index) => (
@@ -85,21 +95,38 @@ export default function Features() {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="h-full"
             >
-              <Card className="h-full backdrop-blur-sm bg-card/80 border-primary/10 hover:border-primary/20 transition-all duration-300 hover:scale-105">
-                <CardHeader>
-                  <motion.div
-                    whileHover={{ scale: 1.1, rotate: 5 }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                  >
-                    <feature.icon className="h-12 w-12 mb-4 text-primary" />
-                  </motion.div>
-                  <CardTitle className="text-xl mb-2">{feature.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground mb-4">{feature.description}</p>
-                  <p className="text-sm text-primary/80">{feature.details}</p>
-                </CardContent>
-              </Card>
+              <HoverCard 
+                hoverEffect="combined" 
+                intensity="medium"
+                duration="normal"
+                className="h-full"
+              >
+                <Card className="h-full backdrop-blur-sm bg-card/80 border-primary/10">
+                  <CardHeader>
+                    <BouncingIcon
+                      bounceHeight="medium"
+                      bounceSpeed="normal"
+                      continuous={false}
+                      className="inline-block mb-4"
+                    >
+                      <feature.icon className="h-12 w-12 text-primary" />
+                    </BouncingIcon>
+                    <CardTitle className="text-xl mb-2">
+                      <AnimatedUnderline 
+                        underlineColor="bg-primary/40" 
+                        underlineHeight={2} 
+                        onlyOnHover={true}
+                      >
+                        {feature.title}
+                      </AnimatedUnderline>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground mb-4">{feature.description}</p>
+                    <p className="text-sm text-primary/80">{feature.details}</p>
+                  </CardContent>
+                </Card>
+              </HoverCard>
             </motion.div>
           ))}
         </div>
