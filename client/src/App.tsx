@@ -8,6 +8,7 @@ import FeatureSuggestion from "@/components/ai/FeatureSuggestion";
 import Home from "@/pages/Home";
 import Blog from "@/pages/Blog";
 import Services from "@/pages/Services";
+import SeoOptimization from "@/pages/services/SeoOptimization";
 import Contact from "@/pages/Contact";
 import Pricing from "@/pages/Pricing";
 import About from "@/pages/About";
@@ -29,6 +30,7 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/blog" component={Blog} />
       <Route path="/services" component={Services} />
+      <Route path="/services/seo-optimization" component={SeoOptimization} />
       <Route path="/pricing" component={Pricing} />
       <Route path="/contact" component={Contact} />
       <Route path="/about" component={About} />

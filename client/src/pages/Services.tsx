@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { LetsTalkButton } from "@/components/common/LetsTalkButton";
+import { Link } from "wouter";
 
 const services = [
   {
@@ -18,9 +20,9 @@ const services = [
     id: "web",
     title: "Web Design & Hosting",
     description: `Professional web design and hosting solutions:
-    • Responsive website design
-    • Custom development
-    • SEO optimization
+    • Custom website development
+    • Search engine optimization
+    • Cross-browser compatibility
     • Secure hosting
     • Performance optimization`,
     image: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8"
@@ -101,9 +103,14 @@ export default function Services() {
                   <CardTitle className="text-2xl">{service.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-lg text-muted-foreground whitespace-pre-line">
+                  <p className="text-lg text-muted-foreground whitespace-pre-line mb-6">
                     {service.description}
                   </p>
+                  {service.id === "web" && (
+                    <Link href="/services/seo-optimization">
+                      <Button variant="outline" className="mt-2">Learn More About SEO</Button>
+                    </Link>
+                  )}
                 </CardContent>
               </Card>
             </div>
