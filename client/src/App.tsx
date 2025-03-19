@@ -10,7 +10,7 @@ import Contact from "@/pages/Contact";
 import Pricing from "@/pages/Pricing";
 import About from "@/pages/About";
 import Portfolio from "@/pages/Portfolio";
-import CaseStudy from "@/pages/CaseStudy";
+import CaseStudy from "@/pages/CaseStudy-fixed";
 import Dashboard from "@/pages/admin/Dashboard";
 import NotFound from "@/pages/not-found";
 import { useEffect } from "react";
