@@ -32,15 +32,19 @@ export default function Navbar() {
           </button>
         </div>
         
-        {/* Navigation Row - Below the logo */}
-        <nav className="flex flex-col md:flex-row justify-center items-center pb-4">
-          <div className="w-full flex justify-center mb-3 md:mb-0">
+        {/* Navigation Row - Below the logo, with improved spacing */}
+        <nav className="flex flex-col md:flex-row justify-between items-center pb-4 max-w-3xl mx-auto">
+          {/* Main navigation links on the left */}
+          <div className="flex justify-center md:justify-start mb-3 md:mb-0">
             <NavigationMenu>
-              <NavigationMenuList className="flex flex-wrap justify-center gap-2 md:gap-4">
+              <NavigationMenuList className="flex space-x-8 md:space-x-12">
                 <NavigationMenuItem>
                   <NavigationMenuTrigger className="text-base md:text-lg font-medium">Services</NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <div className="grid gap-3 p-4 w-[300px] md:w-[400px]">
+                      <Link href="/services/seo-optimization" className="block p-3 hover:bg-accent rounded-md text-base">
+                        SEO Optimization
+                      </Link>
                       <Link href="/services#automation" className="block p-3 hover:bg-accent rounded-md text-base">
                         Business Automation
                       </Link>
@@ -54,15 +58,15 @@ export default function Navbar() {
                   </NavigationMenuContent>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <Link href="/pricing" className="px-3 md:px-5 py-2 hover:text-primary text-base md:text-lg font-medium">Pricing</Link>
+                  <Link href="/pricing" className="text-base md:text-lg font-medium hover:text-primary">Pricing</Link>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <Link href="/blog" className="px-3 md:px-5 py-2 hover:text-primary text-base md:text-lg font-medium">Blog</Link>
+                  <Link href="/blog" className="text-base md:text-lg font-medium hover:text-primary">Blog</Link>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
                   <a 
                     href="/about" 
-                    className="px-3 md:px-5 py-2 hover:text-primary text-base md:text-lg font-medium"
+                    className="text-base md:text-lg font-medium hover:text-primary"
                     onClick={(e) => {
                       e.preventDefault();
                       setLocation("/about");
@@ -76,17 +80,17 @@ export default function Navbar() {
             </NavigationMenu>
           </div>
 
-          <div className="flex justify-center items-center w-full mt-3 md:mt-0">
+          {/* Call-to-action button on the right */}
+          <div className="md:ml-4">
             <a 
               href="https://cal.com/synai-automations-i329dt/intro-call" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="w-full max-w-[200px] flex justify-center"
             >
               <Button 
                 variant="outline" 
                 size="default"
-                className="w-full font-semibold text-base transition-all duration-300 hover:scale-105 hover:shadow-[0_0_15px_rgba(var(--primary-rgb),0.5)] hover:border-primary/50"
+                className="font-semibold text-base transition-all duration-300 hover:scale-105 hover:shadow-[0_0_15px_rgba(var(--primary-rgb),0.5)] hover:border-primary/50"
               >
                 Let's Talk
               </Button>
