@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-import { useLoading } from '@/hooks/use-loading';
+import { useState, useEffect } from 'react';
 import { LetsTalkButton } from '@/components/common/LetsTalkButton';
 import { 
   PageTransition, 
@@ -9,19 +8,18 @@ import {
 } from '@/components/animations';
 
 export default function About() {
-  const { startLoading, stopLoading } = useLoading();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // Scroll to top when component mounts
     window.scrollTo({ top: 0, behavior: 'smooth' });
     
-    startLoading('about');
     // Simulate loading delay
     const timer = setTimeout(() => {
-      stopLoading('about');
+      setIsLoading(false);
     }, 500);
     return () => clearTimeout(timer);
-  }, [startLoading, stopLoading]);
+  }, []);
 
   return (
     <PageTransition>
