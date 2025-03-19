@@ -34,8 +34,8 @@ const plans = [
       "CRM Integration for Lead Management",
       "AI Chatbot (Advanced) & Automated Email Sequences",
       "Conversion-Focused Website Design",
-      "Real-Time Analytics & Reporting",
-      "Priority Support"
+      "Monthly Performance Summary",
+      "Email Support"
     ]
   },
   {
