@@ -8,23 +8,22 @@ import { LetsTalkButton } from "@/components/common/LetsTalkButton";
 const plans = [
   {
     name: "STARTER PLAN",
-    setup: "1,000",
+    setup: "997",
     price: "197",
     subtitle: "",
-    description: "Get started with a sleek, mobile-friendly website designed to capture leads and improve your online presence.",
+    description: "Get started with a sleek website designed to capture leads and improve your online presence.",
     features: [
       "5-Page Website",
       "SEO Optimization & Basic Keyword Research",
       "Lead Capture Forms & Landing Pages",
       "AI Chatbot (Basic)",
-      "Mobile-Friendly Website Design",
-      "Mobile App Management",
+      "Responsive Design & Cross-Browser Compatibility",
       "Email Support"
     ]
   },
   {
     name: "GROWTH PLAN",
-    setup: "2,000",
+    setup: "1997",
     price: "397",
     subtitle: "",
     description: "Scale your business with advanced SEO, automation, and lead management tools to maximize conversions.",
@@ -41,7 +40,7 @@ const plans = [
   },
   {
     name: "ELITE PLAN",
-    setup: "3,000",
+    setup: "3297",
     price: "697",
     subtitle: "",
     description: "Unlock full automation, premium customization, and enterprise-level solutions for high-growth businesses.",
