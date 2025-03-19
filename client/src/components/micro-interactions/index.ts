@@ -5,7 +5,7 @@ export { default as FadeInText } from './FadeInText';
 export { default as BouncingIcon } from './BouncingIcon';
 export { default as PingDot } from './PingDot';
 export { default as AnimatedUnderline } from './AnimatedUnderline';
-export { default as ScrollReveal } from './ScrollReveal';
+export { default as ScrollReveal } from './ScrollReveal-fixed';
 
 // Export configuration
 export * from './config';

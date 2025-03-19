@@ -58,6 +58,9 @@ export default function Navbar() {
                   </NavigationMenuContent>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
+                  <Link href="/portfolio" className="text-base md:text-lg font-medium hover:text-primary">Portfolio</Link>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
                   <Link href="/pricing" className="text-base md:text-lg font-medium hover:text-primary">Pricing</Link>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
