@@ -7,53 +7,53 @@ import { LetsTalkButton } from "@/components/common/LetsTalkButton";
 
 const plans = [
   {
-    name: "Standard",
+    name: "STARTER PLAN",
+    setup: "1,000",
     price: "197",
-    description: "Perfect for small businesses getting started with automation",
+    subtitle: "For Small Businesses & Startups",
+    description: "Get started with a sleek, mobile-friendly website designed to capture leads and improve your online presence.",
     features: [
-      "2 Way Text & Email Conversation",
-      "GMB Messaging",
-      "Web Chat",
-      "Reputation Management",
-      "Facebook Messenger",
-      "GMB Call Tracking",
-      "Missed Call Text Back",
-      "Text To Pay"
+      "3-Page Website",
+      "SEO Optimization & Basic Keyword Research",
+      "Lead Capture Forms & Landing Pages",
+      "AI Chatbot (Basic)",
+      "Mobile-Friendly Website Design",
+      "Mobile App Management",
+      "Email Support"
     ]
   },
   {
-    name: "Professional",
-    price: "297",
-    description: "Advanced features for growing businesses",
+    name: "GROWTH PLAN",
+    setup: "2,000",
+    price: "397",
+    subtitle: "For Scaling Businesses & Entrepreneurs",
+    description: "Scale your business with advanced SEO, automation, and lead management tools to maximize conversions.",
     features: [
-      "Everything in Standard, plus:",
-      "Calendar",
-      "CRM",
-      "Opportunities",
-      "Email Marketing"
+      "5-Page Website",
+      "Everything in Starter, PLUS:",
+      "Advanced SEO & Content Strategy",
+      "CRM Integration for Lead Management",
+      "AI Chatbot (Advanced) & Automated Email Sequences",
+      "Conversion-Focused Website Design",
+      "Real-Time Analytics & Reporting",
+      "Priority Support"
     ]
   },
   {
-    name: "Premium",
-    price: "497",
-    description: "Complete solution for established businesses",
+    name: "ELITE PLAN",
+    setup: "3,000",
+    price: "697",
+    subtitle: "For High-Performing Brands & Enterprises",
+    description: "Unlock full automation, premium customization, and enterprise-level solutions for high-growth businesses.",
     features: [
-      "Everything in Professional, plus:",
-      "Funnels",
-      "Memberships",
-      "Websites",
-      "Workflows",
-      "Forms",
-      "Surveys",
-      "Trigger Links",
-      "SMS & Email Templates",
-      "All Reporting",
-      "Triggers",
-      "Campaigns",
-      "Social Planner",
-      "Invoice",
-      "Blogs",
-      "Affiliate Manager"
+      "10-Page Website",
+      "Everything in Growth, PLUS:",
+      "Full AI-Driven Automation & Smart Workflows",
+      "E-Commerce & Payment Integration",
+      "Custom Branding & UI/UX Enhancements",
+      "Multi-Platform Lead Generation",
+      "Dedicated Account Manager",
+      "24/7 VIP Support"
     ]
   }
 ];
@@ -102,9 +102,9 @@ export default function Pricing() {
         transition={{ duration: 0.6 }}
         className="text-center mb-12"
       >
-        <h1 className="text-4xl font-bold mb-4">Simple, Transparent Pricing</h1>
+        <h1 className="text-4xl font-bold mb-4">Flexible Plans Tailored to Your Business Needs</h1>
         <p className="text-xl text-muted-foreground">
-          Choose the plan that best fits your business needs
+          Choose the plan that best fits your business requirements
         </p>
       </motion.div>
 
@@ -121,26 +121,33 @@ export default function Pricing() {
             whileHover="hover"
           >
             <Card className="h-full backdrop-blur-sm bg-card/80 border-primary/10 hover:border-primary/20 transition-colors">
-              <CardHeader>
-                <CardTitle className="text-2xl mb-2">{plan.name}</CardTitle>
-                <div className="mb-4">
-                  <span className="text-4xl font-bold">${plan.price}</span>
-                  <span className="text-muted-foreground">/month</span>
+              <CardHeader className="text-center">
+                <CardTitle className="text-2xl font-bold mb-1">{plan.name}</CardTitle>
+                <p className="text-sm mb-4 text-muted-foreground">{plan.subtitle}</p>
+                <div className="py-3 bg-primary/10 rounded-md mb-4">
+                  <div className="text-center">
+                    <span className="text-xl font-semibold">${plan.setup} Setup</span>
+                    <span className="text-lg mx-1">+</span>
+                  </div>
+                  <div className="text-center">
+                    <span className="text-4xl font-bold">${plan.price}</span>
+                    <span className="text-muted-foreground">/month</span>
+                  </div>
                 </div>
-                <p className="text-muted-foreground">{plan.description}</p>
+                <p className="text-muted-foreground text-sm">{plan.description}</p>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-3">
                   {plan.features.map((feature) => (
-                    <li key={feature} className="flex items-center gap-2">
-                      <Check className="h-5 w-5 text-primary" />
+                    <li key={feature} className="flex items-start gap-2">
+                      <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
                       <span>{feature}</span>
                     </li>
                   ))}
                 </ul>
-                <Link href="/contact">
-                  <Button className="w-full mt-6">Get Started</Button>
-                </Link>
+                <div className="mt-6">
+                  <Button className="w-full font-medium">SIGN UP NOW</Button>
+                </div>
               </CardContent>
             </Card>
           </motion.div>
