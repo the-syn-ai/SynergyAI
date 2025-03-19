@@ -6,7 +6,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { useLoading } from "@/hooks/use-loading";
 import { FAQSectionSkeleton } from "@/components/ui/loading-skeleton";
 
 // FAQ data
@@ -38,25 +37,20 @@ const faqItems = [
 ];
 
 export default function FAQ() {
-  const { isLoading, setIsLoading } = useLoading();
-  const [isLocalLoading, setIsLocalLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   
-  // Manually set loading state
+  // Simulate loading state with local state
   useEffect(() => {
-    // Immediately set loading state
-    setIsLoading(prev => ({ ...prev, faqSection: true }));
-    
     // Clear loading state after a timeout
     const timer = setTimeout(() => {
-      setIsLoading(prev => ({ ...prev, faqSection: false }));
-      setIsLocalLoading(false);
+      setIsLoading(false);
     }, 900); // Slightly longer than Features to ensure staggered loading
     
     return () => clearTimeout(timer);
-  }, [setIsLoading]);
+  }, []);
 
   // Show skeleton while loading
-  if (isLoading.faqSection || isLocalLoading) {
+  if (isLoading) {
     return <FAQSectionSkeleton />;
   }
 

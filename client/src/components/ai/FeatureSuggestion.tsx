@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { ElementTransition } from '@/components/animations';
 import { X, Lightbulb, ChevronRight, ChevronLeft, Star, Sparkles } from 'lucide-react';
 import { useLocation } from 'wouter';
-import { useLoading } from '@/hooks/use-loading';
 
 // Types for feature suggestions
 type FeatureSuggestion = {
@@ -117,25 +116,25 @@ export default function FeatureSuggestion() {
   const [isOpen, setIsOpen] = useState(false);
   const [location] = useLocation();
   const [suggestions, setSuggestions] = useState<FeatureSuggestion[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [, setLocation] = useLocation();
-  const { startLoading, stopLoading } = useLoading();
 
   // Update suggestions when location changes
   useEffect(() => {
     if (isOpen) {
       // Start loading indicator
-      startLoading('featureSuggestion');
+      setIsLoading(true);
       setSuggestions([]);
       
       // Delay suggestion update to simulate AI processing
       const timer = setTimeout(() => {
         setSuggestions(getPageSuggestions(location));
-        stopLoading('featureSuggestion');
+        setIsLoading(false);
       }, 800);
       
       return () => clearTimeout(timer);
     }
-  }, [location, isOpen, startLoading, stopLoading]);
+  }, [location, isOpen]);
 
   // Toggle sidebar
   const toggleSidebar = () => {
@@ -188,7 +187,7 @@ export default function FeatureSuggestion() {
 
             {/* Content */}
             <div className="flex-1 overflow-auto p-4 space-y-4">
-              {suggestions.length === 0 ? (
+              {isLoading ? (
                 <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
                   <Lightbulb className="w-10 h-10 mb-2 opacity-50" />
                   <p>AI is thinking...</p>

@@ -19,7 +19,6 @@ import {
   GitCompareIcon 
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useLoading } from "@/hooks/use-loading";
 import ShareResults from "@/components/common/ShareResults";
 import HistoricalAnalysisChart from "./HistoricalAnalysisChart";
 
@@ -33,8 +32,7 @@ type AnalysisScores = {
 
 export default function CompanyAIChat() {
   const { toast } = useToast();
-  const { isLoading, setIsLoading } = useLoading();
-  const [isLocalLoading, setIsLocalLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [messages, setMessages] = useState<Array<{ text: string; isBot: boolean }>>([
     { text: "Enter your company website URL to get started!", isBot: true },
   ]);
@@ -53,15 +51,12 @@ export default function CompanyAIChat() {
   
   // Simulate loading on component mount
   useEffect(() => {
-    setIsLoading(prev => ({ ...prev, websiteAnalysis: true }));
-    
     const timer = setTimeout(() => {
-      setIsLoading(prev => ({ ...prev, websiteAnalysis: false }));
-      setIsLocalLoading(false);
+      setIsLoading(false);
     }, 1000);
     
     return () => clearTimeout(timer);
-  }, [setIsLoading]);
+  }, []);
 
   const handleUrlSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -193,7 +188,7 @@ export default function CompanyAIChat() {
   };
   
   // Loading state
-  if (isLoading.websiteAnalysis || isLocalLoading) {
+  if (isLoading) {
     return (
       <Card className="w-full max-w-4xl mx-auto border border-primary/20 shadow-lg backdrop-blur-sm">
         <CardHeader>

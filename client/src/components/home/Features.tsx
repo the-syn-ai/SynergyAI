@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Globe, Box, Mail, Phone, MessageSquare, Star } from "lucide-react";
-import { useLoading } from "@/hooks/use-loading";
 import { FeaturesSectionSkeleton } from "@/components/ui/loading-skeleton";
 
 const features = [
@@ -45,25 +44,20 @@ const features = [
 ];
 
 export default function Features() {
-  const { isLoading, setIsLoading, simulateLoading } = useLoading();
-  const [isLocalLoading, setIsLocalLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   
-  // Manually set loading state instead of simulating
+  // Simulate loading state with local state
   useEffect(() => {
-    // Immediately set loading state
-    setIsLoading(prev => ({ ...prev, featuresSection: true }));
-    
     // Clear loading state after a timeout
     const timer = setTimeout(() => {
-      setIsLoading(prev => ({ ...prev, featuresSection: false }));
-      setIsLocalLoading(false);
+      setIsLoading(false);
     }, 800);
     
     return () => clearTimeout(timer);
-  }, [setIsLoading]);
+  }, []);
 
   // Show skeleton while loading
-  if (isLoading.featuresSection || isLocalLoading) {
+  if (isLoading) {
     return <FeaturesSectionSkeleton />;
   }
 

@@ -1,7 +1,4 @@
 import { Switch, Route } from "wouter";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { queryClient } from "./lib/queryClient";
-import { Toaster } from "@/components/ui/toaster";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import FeatureSuggestion from "@/components/ai/FeatureSuggestion";
@@ -15,7 +12,6 @@ import About from "@/pages/About";
 import Dashboard from "@/pages/admin/Dashboard";
 import NotFound from "@/pages/not-found";
 import { useEffect } from "react";
-import { LoadingProvider } from "./hooks/use-loading";
 
 function Router() {
   // Log route changes in development
@@ -42,20 +38,15 @@ function Router() {
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <LoadingProvider>
-        <div className="min-h-screen bg-background text-foreground">
-          <Navbar />
-          <main className="relative pt-[130px] md:pt-[140px]"> {/* Adjusted padding to account for taller navbar */}
-            <Router />
-            {/* AI-powered feature suggestion sidebar */}
-            <FeatureSuggestion />
-          </main>
-          <Footer />
-          <Toaster />
-        </div>
-      </LoadingProvider>
-    </QueryClientProvider>
+    <div className="min-h-screen bg-background text-foreground">
+      <Navbar />
+      <main className="relative pt-[130px] md:pt-[140px]"> {/* Adjusted padding to account for taller navbar */}
+        <Router />
+        {/* AI-powered feature suggestion sidebar */}
+        <FeatureSuggestion />
+      </main>
+      <Footer />
+    </div>
   );
 }
 
