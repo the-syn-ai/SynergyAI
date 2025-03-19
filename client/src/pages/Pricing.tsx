@@ -50,7 +50,7 @@ const plans = [
       "Full AI-Driven Automation & Smart Workflows",
       "Advanced Analytics Dashboard",
       "Multi-Platform Lead Generation",
-      "Priority Email & Phone Support"
+      "Email Support"
     ]
   }
 ];
