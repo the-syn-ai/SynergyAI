@@ -37,7 +37,7 @@ const portfolioItems: PortfolioItem[] = [
     description: 'Complete digital transformation with AI-powered messaging, CRM integration, and smart marketing automation.',
     industry: 'Manufacturing',
     services: ['CRM Integration', 'AI Messaging', 'Email Automation'],
-    image: '/images/portfolio-1.jpg',
+    image: '/images/portfolio-1.svg',
     results: [
       { label: 'Lead Generation', value: '205%', change: 'increase' },
       { label: 'Customer Retention', value: '78%', change: 'improvement' },
@@ -56,7 +56,7 @@ const portfolioItems: PortfolioItem[] = [
     description: 'Implemented AI call bot and review management system that revolutionized their customer service approach.',
     industry: 'Professional Services',
     services: ['AI Call Bot', 'Review Management', 'CRM Integration'],
-    image: '/images/portfolio-2.jpg',
+    image: '/images/portfolio-2.svg',
     results: [
       { label: 'Customer Satisfaction', value: '92%', change: 'increase' },
       { label: 'Response Time', value: '3.5 min', change: 'decrease from 2 hours' },
@@ -75,7 +75,7 @@ const portfolioItems: PortfolioItem[] = [
     description: 'Built a HIPAA-compliant communication platform with intelligent appointment scheduling and follow-up automation.',
     industry: 'Healthcare',
     services: ['Web Design', 'Email Automation', 'GHL Integration'],
-    image: '/images/portfolio-3.jpg',
+    image: '/images/portfolio-3.svg',
     results: [
       { label: 'Appointment No-Shows', value: '76%', change: 'reduction' },
       { label: 'Patient Engagement', value: '89%', change: 'increase' },
@@ -135,8 +135,16 @@ function PortfolioCard({ item }: { item: PortfolioItem }) {
     <HoverCard hoverEffect="lift" className="h-full">
       <Card className="h-full flex flex-col border-none shadow-md overflow-hidden">
         <div className="h-48 bg-muted flex items-center justify-center overflow-hidden">
-          <div className="w-full h-full bg-gradient-to-r from-primary/20 to-primary/5 flex items-center justify-center text-primary-foreground">
-            <span className="text-xl font-bold">{item.client}</span>
+          <div 
+            className="w-full h-full bg-gradient-to-r from-primary/20 to-primary/5 flex items-center justify-center text-primary-foreground"
+            style={{
+              backgroundImage: `url(${item.image})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundBlendMode: 'overlay'
+            }}
+          >
+            <span className="text-xl font-bold text-primary-foreground drop-shadow-md">{item.client}</span>
           </div>
         </div>
         

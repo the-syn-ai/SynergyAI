@@ -325,8 +325,16 @@ export default function CaseStudy() {
         {/* Hero Image Section */}
         <ScrollReveal>
           <div className="w-full h-64 md:h-80 bg-primary/10 rounded-lg mb-12 flex items-center justify-center overflow-hidden">
-            <div className="w-full h-full bg-gradient-to-r from-primary/20 to-primary/5 flex items-center justify-center">
-              <span className="text-3xl font-bold text-primary">{caseStudy.client}</span>
+            <div 
+              className="w-full h-full bg-gradient-to-r from-primary/20 to-primary/5 flex items-center justify-center"
+              style={{
+                backgroundImage: `url(${caseStudy.image})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundBlendMode: 'overlay'
+              }}
+            >
+              <span className="text-3xl font-bold text-primary-foreground drop-shadow-lg">{caseStudy.client}</span>
             </div>
           </div>
         </ScrollReveal>
