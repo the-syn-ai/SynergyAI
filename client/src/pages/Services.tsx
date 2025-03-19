@@ -50,6 +50,17 @@ const services = [
     image: "https://images.unsplash.com/photo-1563986768494-4dee2763ff3f"
   },
   {
+    id: "messaging",
+    title: "AI Messaging",
+    description: `Intelligent messaging and chat solutions:
+    • 24/7 automated customer support
+    • Smart chatbots
+    • Lead qualification
+    • FAQ automation
+    • Seamless handoff to human operators`,
+    image: "https://images.unsplash.com/photo-1577563908411-5077b6dc7624"
+  },
+  {
     id: "calls",
     title: "AI Call Bot",
     description: `Intelligent call handling system:
