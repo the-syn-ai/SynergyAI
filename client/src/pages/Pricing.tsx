@@ -48,11 +48,9 @@ const plans = [
       "20+ Page Website",
       "Everything in Growth, PLUS:",
       "Full AI-Driven Automation & Smart Workflows",
-      "E-Commerce & Payment Integration",
-      "Custom Branding & UI/UX Enhancements",
+      "Advanced Analytics Dashboard",
       "Multi-Platform Lead Generation",
-      "Dedicated Account Manager",
-      "24/7 VIP Support"
+      "Priority Email & Phone Support"
     ]
   }
 ];
