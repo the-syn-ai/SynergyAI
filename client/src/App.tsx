@@ -9,8 +9,7 @@ import SeoOptimization from "@/pages/services/SeoOptimization";
 import Contact from "@/pages/Contact";
 import Pricing from "@/pages/Pricing";
 import About from "@/pages/About";
-import Portfolio from "@/pages/Portfolio";
-import CaseStudy from "@/pages/CaseStudy-fixed";
+
 import Dashboard from "@/pages/admin/Dashboard";
 import NotFound from "@/pages/not-found";
 import { useEffect } from "react";
@@ -29,8 +28,6 @@ function Router() {
       <Route path="/blog" component={Blog} />
       <Route path="/services" component={Services} />
       <Route path="/services/seo-optimization" component={SeoOptimization} />
-      <Route path="/portfolio" component={Portfolio} />
-      <Route path="/portfolio/:id" component={CaseStudy} />
       <Route path="/pricing" component={Pricing} />
       <Route path="/contact" component={Contact} />
       <Route path="/about" component={About} />
