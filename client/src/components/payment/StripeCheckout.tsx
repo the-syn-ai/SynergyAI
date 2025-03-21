@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
 import LoadingAnimation from '@/components/animations/LoadingAnimation';
 
@@ -29,12 +28,11 @@ export default function StripeCheckout({
     setIsLoading(true);
     
     try {
-      const response = await apiRequest('/api/payment/create-checkout', {
+      const response = await fetch('/api/payment/create-checkout', {
         method: 'POST',
-        body: JSON.stringify({ 
-          tier: serviceTier,
-          email
-        })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tier: serviceTier, email }),
+        credentials: 'include'
       });
       
       if (!response.ok) {
@@ -96,10 +94,14 @@ export function PlanSelector({
   React.useEffect(() => {
     const fetchPlans = async () => {
       try {
-        const response = await apiRequest('/api/payment/plans');
+        const response = await fetch('/api/payment/plans', {
+          credentials: 'include'
+        });
+        
         if (!response.ok) {
           throw new Error('Failed to fetch plans');
         }
+        
         const data = await response.json();
         setPlans(data);
       } catch (error) {

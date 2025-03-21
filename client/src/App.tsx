@@ -9,6 +9,7 @@ import SeoOptimization from "@/pages/services/SeoOptimization";
 import Contact from "@/pages/Contact";
 import Pricing from "@/pages/Pricing";
 import About from "@/pages/About";
+import Signup from "@/pages/Signup";
 
 import Dashboard from "@/pages/admin/Dashboard";
 import NotFound from "@/pages/not-found";
@@ -31,6 +32,8 @@ function Router() {
       <Route path="/pricing" component={Pricing} />
       <Route path="/contact" component={Contact} />
       <Route path="/about" component={About} />
+      <Route path="/signup" component={Signup} />
+      <Route path="/signup/success" component={Signup} />
       <Route path="/admin/dashboard" component={Dashboard} />
       <Route component={NotFound} />
     </Switch>
