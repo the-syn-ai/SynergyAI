@@ -19,6 +19,8 @@ import {
 } from "@shared/schema";
 import OpenAI from "openai";
 import fetch from 'node-fetch';
+import { sendContactNotification, sendSubscriberNotification, sendWelcomeEmail } from "./services/emailService";
+import stripeService, { ServiceTier } from "./services/stripeService";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
@@ -280,8 +282,18 @@ export async function registerRoutes(app: Express) {
       return res.status(400).json({ error: "Invalid message data" });
     }
 
-    const message = await storage.createMessage(result.data);
-    res.json(message);
+    try {
+      // Save the message to the database
+      const message = await storage.createMessage(result.data);
+      
+      // Send email notification to contact@synergyai-automations.com
+      await sendContactNotification(message);
+      
+      res.json(message);
+    } catch (error) {
+      console.error("Error processing contact form:", error);
+      res.status(500).json({ error: "Failed to process your message. Please try again." });
+    }
   });
 
   app.post("/api/subscribe", async (req, res) => {
@@ -290,8 +302,21 @@ export async function registerRoutes(app: Express) {
       return res.status(400).json({ error: "Invalid subscriber data" });
     }
 
-    const subscriber = await storage.createSubscriber(result.data);
-    res.json(subscriber);
+    try {
+      // Save subscriber to database
+      const subscriber = await storage.createSubscriber(result.data);
+      
+      // Send notification to contact@synergyai-automations.com
+      await sendSubscriberNotification(subscriber);
+      
+      // Send welcome email to the new subscriber
+      await sendWelcomeEmail(subscriber);
+      
+      res.json(subscriber);
+    } catch (error) {
+      console.error("Error processing subscription:", error);
+      res.status(500).json({ error: "Failed to process your subscription. Please try again." });
+    }
   });
 
   // New routes for website analysis
