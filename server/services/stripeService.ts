@@ -2,7 +2,7 @@ import Stripe from 'stripe';
 
 // Initialize Stripe with the secret key
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
-  apiVersion: '2023-10-16', // Specify the Stripe API version
+  apiVersion: '2023-10-16' as any, // Specify the Stripe API version
 });
 
 // Define the service tiers

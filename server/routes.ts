@@ -57,6 +57,116 @@ interface AnalysisResult {
 }
 
 export async function registerRoutes(app: Express) {
+  // Stripe Payment Routes
+  app.get("/api/payment/plans", (_req, res) => {
+    res.json(stripeService.serviceTiers);
+  });
+
+  app.post("/api/payment/create-checkout", async (req, res) => {
+    try {
+      const { tier, email } = req.body;
+      
+      if (!tier) {
+        return res.status(400).json({ error: "Service tier is required" });
+      }
+      
+      // Optional: Create a customer if email is provided
+      let customerId;
+      if (email) {
+        const customer = await stripeService.createCustomer(email);
+        customerId = customer.id;
+      }
+      
+      const session = await stripeService.createCheckoutSession(tier as ServiceTier, customerId);
+      res.json({ 
+        sessionId: session.id, 
+        url: session.url 
+      });
+    } catch (error) {
+      console.error("Error creating checkout session:", error);
+      res.status(500).json({ error: "Failed to create checkout session" });
+    }
+  });
+
+  app.get("/api/payment/session/:sessionId", async (req, res) => {
+    try {
+      const { sessionId } = req.params;
+      const session = await stripeService.getCheckoutSession(sessionId);
+      res.json(session);
+    } catch (error) {
+      console.error("Error retrieving session:", error);
+      res.status(500).json({ error: "Failed to retrieve session" });
+    }
+  });
+
+  app.post("/api/payment/create-intent", async (req, res) => {
+    try {
+      const { amount, email } = req.body;
+      
+      if (!amount || typeof amount !== 'number') {
+        return res.status(400).json({ error: "Valid amount is required" });
+      }
+      
+      // Optional: Create a customer if email is provided
+      let customerId;
+      if (email) {
+        const customer = await stripeService.createCustomer(email);
+        customerId = customer.id;
+      }
+      
+      const paymentIntent = await stripeService.createPaymentIntent(amount, 'usd', customerId);
+      res.json({ 
+        clientSecret: paymentIntent.client_secret,
+        intentId: paymentIntent.id
+      });
+    } catch (error) {
+      console.error("Error creating payment intent:", error);
+      res.status(500).json({ error: "Failed to create payment intent" });
+    }
+  });
+
+  // Stripe webhook handler for asyncronous events
+  app.post("/api/payment/webhook", async (req, res) => {
+    // Check for Stripe signature header
+    const signature = req.headers['stripe-signature'] as string;
+    if (!signature) {
+      return res.status(400).json({ error: "Stripe signature header is missing" });
+    }
+
+    try {
+      // Validate the webhook signature
+      const event = stripeService.validateWebhookSignature(
+        req.body,
+        signature
+      );
+
+      // Handle the event based on its type
+      switch (event.type) {
+        case 'checkout.session.completed':
+          // Payment was successful
+          console.log('Checkout session completed:', event.data.object);
+          // Here you could implement logic to create an account, 
+          // provision services, send confirmation email, etc.
+          break;
+          
+        case 'payment_intent.succeeded':
+          console.log('Payment intent succeeded:', event.data.object);
+          break;
+          
+        case 'payment_intent.payment_failed':
+          console.log('Payment failed:', event.data.object);
+          break;
+          
+        default:
+          console.log(`Unhandled event type: ${event.type}`);
+      }
+
+      res.json({ received: true });
+    } catch (error) {
+      console.error('Webhook error:', error);
+      return res.status(400).json({ error: "Webhook signature verification failed" });
+    }
+  });
   // Blog and Post Category endpoints
   app.get("/api/posts", async (req, res) => {
     const categoryId = req.query.categoryId ? Number(req.query.categoryId) : undefined;
