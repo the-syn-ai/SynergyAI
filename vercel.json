@@ -1,19 +1,9 @@
 {
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/api/$1"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ],
+  "rootDirectory": "client",
   "builds": [
     {
-      "src": "api/**/*.ts",
+      "src": "../api/**/*.ts",
       "use": "@vercel/node"
     }
-  ],
-  "outputDirectory": "dist"
+  ]
 }
