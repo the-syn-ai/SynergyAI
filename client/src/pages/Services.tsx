@@ -81,6 +81,18 @@ const services = [
     • Performance tracking
     • Review integration`,
     image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40"
+  },
+  {
+    id: "leads",
+    title: "Lead Generation",
+    description: `Comprehensive lead generation solutions for companies:
+    • Multi-channel lead capture
+    • AI-powered lead qualification
+    • Automated follow-up sequences
+    • Lead scoring and prioritization
+    • Integration with existing CRM systems
+    • Performance analytics and reporting`,
+    image: "https://images.unsplash.com/photo-1553484771-371a605b060b"
   }
 ];
 
