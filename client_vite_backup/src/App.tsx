@@ -46,8 +46,7 @@ function App() {
       <Navbar />
       <main className="relative pt-[130px] md:pt-[140px]"> {/* Adjusted padding to account for taller navbar */}
         <Router />
-        {/* AI-powered feature suggestion sidebar */}
-        <FeatureSuggestion />
+
       </main>
       <Footer />
     </div>
