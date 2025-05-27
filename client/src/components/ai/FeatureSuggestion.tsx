@@ -146,9 +146,47 @@ export default function FeatureSuggestion() {
     if (suggestion.actionPath) {
       setLocation(suggestion.actionPath);
     } else {
-      // Handle other actions (could be expanded in the future)
-      console.log(`Action triggered for: ${suggestion.title}`);
+      // Handle specific actions for different suggestions
+      switch (suggestion.id) {
+        case 'website-analyzer':
+          // Scroll to the website analysis section on the home page
+          if (location === '/') {
+            const analysisSection = document.querySelector('.py-20.bg-gradient-to-b');
+            if (analysisSection) {
+              analysisSection.scrollIntoView({ behavior: 'smooth' });
+            }
+          } else {
+            setLocation('/');
+            setTimeout(() => {
+              const analysisSection = document.querySelector('.py-20.bg-gradient-to-b');
+              if (analysisSection) {
+                analysisSection.scrollIntoView({ behavior: 'smooth' });
+              }
+            }, 500);
+          }
+          break;
+        case 'ai-chatbot':
+          // Navigate to services page and highlight chatbot section
+          setLocation('/services');
+          setTimeout(() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }, 100);
+          break;
+        case 'seo-enhancement':
+          setLocation('/services/seo-optimization');
+          break;
+        case 'case-studies':
+          setLocation('/blog');
+          break;
+        case 'custom-integration':
+          setLocation('/contact');
+          break;
+        default:
+          console.log(`Action triggered for: ${suggestion.title}`);
+      }
     }
+    // Close sidebar after action
+    setIsOpen(false);
   };
 
   return (
