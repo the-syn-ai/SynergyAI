@@ -8,6 +8,7 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 export default function Navbar() {
   const [, setLocation] = useLocation();
@@ -23,13 +24,17 @@ export default function Navbar() {
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border/50 shadow-sm">
       <div className="container mx-auto px-4">
         {/* Logo Row - Always at the top */}
-        <div className="flex justify-center items-center py-4">
+        <div className="flex justify-between items-center py-4">
+          <div className="flex-1"></div>
           <button 
             onClick={handleLogoClick}
             className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary via-blue-500 to-purple-600 bg-clip-text text-transparent hover:scale-105 transition-transform duration-200"
           >
             SynergyAI
           </button>
+          <div className="flex-1 flex justify-end">
+            <ThemeToggle />
+          </div>
         </div>
         
         {/* Navigation Row - Below the logo, with improved spacing */}
