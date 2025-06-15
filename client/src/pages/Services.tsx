@@ -145,9 +145,19 @@ export default function Services() {
                     >
                       Get Started
                     </Button>
+                    {service.id === "ghl" && (
+                      <Link href="/services/ghl-integration">
+                        <Button variant="outline">Learn More</Button>
+                      </Link>
+                    )}
                     {service.id === "web" && (
-                      <Link href="/services/seo-optimization">
-                        <Button variant="outline">SEO Details</Button>
+                      <Link href="/services/web-design">
+                        <Button variant="outline">Learn More</Button>
+                      </Link>
+                    )}
+                    {service.id === "crm" && (
+                      <Link href="/services/crm-solutions">
+                        <Button variant="outline">Learn More</Button>
                       </Link>
                     )}
                   </div>

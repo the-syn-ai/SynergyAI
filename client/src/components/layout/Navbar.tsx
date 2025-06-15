@@ -47,17 +47,20 @@ export default function Navbar() {
                   <NavigationMenuTrigger className="text-base md:text-lg font-medium">Services</NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <div className="grid gap-3 p-4 w-[300px] md:w-[400px]">
+                      <Link href="/services/ghl-integration" className="block p-3 hover:bg-accent rounded-md text-base">
+                        GHL Integration
+                      </Link>
+                      <Link href="/services/web-design" className="block p-3 hover:bg-accent rounded-md text-base">
+                        Web Design & Hosting
+                      </Link>
+                      <Link href="/services/crm-solutions" className="block p-3 hover:bg-accent rounded-md text-base">
+                        CRM Solutions
+                      </Link>
                       <Link href="/services/seo-optimization" className="block p-3 hover:bg-accent rounded-md text-base">
                         SEO Optimization
                       </Link>
-                      <Link href="/services#automation" className="block p-3 hover:bg-accent rounded-md text-base">
-                        Business Automation
-                      </Link>
-                      <Link href="/services#web" className="block p-3 hover:bg-accent rounded-md text-base">
-                        Web Design & Hosting
-                      </Link>
-                      <Link href="/services#crm" className="block p-3 hover:bg-accent rounded-md text-base">
-                        CRM Solutions
+                      <Link href="/services" className="block p-3 hover:bg-accent rounded-md text-base font-semibold">
+                        View All Services
                       </Link>
                     </div>
                   </NavigationMenuContent>
