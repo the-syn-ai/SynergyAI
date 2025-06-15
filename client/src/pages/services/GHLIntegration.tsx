@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { CheckCircle, ArrowLeft, Zap, Target, Users, BarChart3 } from "lucide-react";
 
 const features = [
@@ -41,6 +41,14 @@ const benefits = [
 ];
 
 export default function GHLIntegration() {
+  const [, setLocation] = useLocation();
+
+  const handleContactClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setLocation("/contact");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <div className="container mx-auto px-4 py-20">
       <motion.div
@@ -122,11 +130,9 @@ export default function GHLIntegration() {
                 Get Started Today
               </Button>
             </Link>
-            <Link href="/contact">
-              <Button size="lg" variant="outline">
-                Schedule Consultation
-              </Button>
-            </Link>
+            <Button size="lg" variant="outline" onClick={handleContactClick}>
+              Schedule Consultation
+            </Button>
           </div>
         </div>
       </motion.div>

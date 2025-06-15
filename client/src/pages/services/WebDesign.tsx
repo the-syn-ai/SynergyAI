@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { CheckCircle, ArrowLeft, Globe, Smartphone, Search, Shield, Zap, Code } from "lucide-react";
 
 const features = [
@@ -55,6 +55,14 @@ const services = [
 ];
 
 export default function WebDesign() {
+  const [, setLocation] = useLocation();
+
+  const handleContactClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setLocation("/contact");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <div className="container mx-auto px-4 py-20">
       <motion.div
@@ -190,11 +198,9 @@ export default function WebDesign() {
                 Get Started Today
               </Button>
             </Link>
-            <Link href="/contact">
-              <Button size="lg" variant="outline">
-                Request Quote
-              </Button>
-            </Link>
+            <Button size="lg" variant="outline" onClick={handleContactClick}>
+              Request Quote
+            </Button>
           </div>
         </div>
       </motion.div>
