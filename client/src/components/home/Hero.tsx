@@ -42,7 +42,7 @@ export default function Hero() {
             <motion.div 
               variants={textVariants}
             >
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 tracking-tight">
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 tracking-tight py-2">
                 Transform Your Business with{" "}
                 <span className="text-primary bg-gradient-to-r from-primary via-blue-500 to-purple-600 bg-clip-text text-transparent">AI Automation</span>
               </h1>
