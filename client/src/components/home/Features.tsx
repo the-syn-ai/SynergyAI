@@ -70,7 +70,7 @@ export default function Features() {
           direction="up"
           duration="normal"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-primary via-blue-500 to-purple-600 bg-clip-text text-transparent">
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-primary via-blue-500 to-purple-600 bg-clip-text text-transparent gradient-text-safe">
             <AnimatedUnderline 
               underlineColor="bg-primary/60" 
               underlineHeight={3} 

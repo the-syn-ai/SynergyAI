@@ -85,4 +85,11 @@
       opacity: 0.3;
     }
   }
+
+  .gradient-text-safe {
+    line-height: 1.3;
+    padding-bottom: 0.15em;
+    display: inline-block;
+    overflow: visible;
+  }
 }
