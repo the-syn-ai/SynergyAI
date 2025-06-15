@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { useEffect, useRef } from "react";
 import { ArrowRight } from "lucide-react";
+import { Carousel } from "@/components/ui/carousel";
 
 const textVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -101,7 +102,7 @@ export default function Hero() {
           </motion.div>
         </div>
         
-        {/* Stats Section */}
+        {/* Stats Section with Carousel */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -109,22 +110,38 @@ export default function Hero() {
           className="mt-20 pt-12 border-t border-border/50"
         >
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div className="space-y-2">
-              <div className="text-3xl font-bold text-primary">500+</div>
-              <div className="text-sm text-muted-foreground">Happy Clients</div>
-            </div>
-            <div className="space-y-2">
-              <div className="text-3xl font-bold text-primary">95%</div>
-              <div className="text-sm text-muted-foreground">Success Rate</div>
-            </div>
-            <div className="space-y-2">
-              <div className="text-3xl font-bold text-primary">24/7</div>
-              <div className="text-sm text-muted-foreground">AI Support</div>
-            </div>
-            <div className="space-y-2">
-              <div className="text-3xl font-bold text-primary">50%</div>
-              <div className="text-sm text-muted-foreground">Cost Reduction</div>
-            </div>
+            <Carousel 
+              items={[
+                { value: "500+", label: "Happy Clients" },
+                { value: "1000+", label: "Projects Completed" },
+                { value: "50+", label: "Countries Served" }
+              ]}
+              interval={2500}
+            />
+            <Carousel 
+              items={[
+                { value: "95%", label: "Success Rate" },
+                { value: "98%", label: "Client Satisfaction" },
+                { value: "99.9%", label: "Uptime Guarantee" }
+              ]}
+              interval={3000}
+            />
+            <Carousel 
+              items={[
+                { value: "24/7", label: "AI Support" },
+                { value: "365", label: "Days Available" },
+                { value: "<2min", label: "Response Time" }
+              ]}
+              interval={3500}
+            />
+            <Carousel 
+              items={[
+                { value: "50%", label: "Cost Reduction" },
+                { value: "80%", label: "Time Saved" },
+                { value: "300%", label: "ROI Average" }
+              ]}
+              interval={2800}
+            />
           </div>
         </motion.div>
       </div>
