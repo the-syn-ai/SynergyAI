@@ -1,6 +1,7 @@
 import Hero from "@/components/home/Hero";
 import Features from "@/components/home/Features";
 import CompanyAIChat from "@/components/home/CompanyAIChat";
+import Testimonials from "@/components/home/Testimonials";
 import Newsletter from "@/components/home/Newsletter";
 import FAQ from "@/components/home/FAQ";
 import { PageTransition, ElementTransition } from "@/components/animations";

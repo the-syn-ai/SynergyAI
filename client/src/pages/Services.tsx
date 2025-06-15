@@ -99,7 +99,15 @@ const services = [
 export default function Services() {
   return (
     <div className="container mx-auto px-4 py-20">
-      <h1 className="text-4xl font-bold mb-12">Our Services</h1>
+      <div className="text-center mb-20">
+        <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary via-blue-500 to-purple-600 bg-clip-text text-transparent">
+          Our AI-Powered Services
+        </h1>
+        <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+          Transform your business operations with our comprehensive suite of AI automation solutions. 
+          From lead generation to customer management, we've got you covered.
+        </p>
+      </div>
 
       <div className="space-y-20">
         {services.map((service, index) => (
@@ -121,19 +129,28 @@ export default function Services() {
             </div>
 
             <div>
-              <Card>
+              <Card className="h-full border-2 hover:border-primary/30 transition-all hover:shadow-xl bg-gradient-to-br from-background to-muted/20">
                 <CardHeader>
-                  <CardTitle className="text-2xl">{service.title}</CardTitle>
+                  <CardTitle className="text-3xl font-bold bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
+                    {service.title}
+                  </CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <p className="text-lg text-muted-foreground whitespace-pre-line mb-6">
+                <CardContent className="space-y-4">
+                  <p className="text-lg text-muted-foreground whitespace-pre-line leading-relaxed">
                     {service.description}
                   </p>
-                  {service.id === "web" && (
-                    <Link href="/services/seo-optimization">
-                      <Button variant="outline" className="mt-2">Learn More About SEO</Button>
-                    </Link>
-                  )}
+                  <div className="flex gap-3 pt-4">
+                    <Button 
+                      className="bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90"
+                    >
+                      Get Started
+                    </Button>
+                    {service.id === "web" && (
+                      <Link href="/services/seo-optimization">
+                        <Button variant="outline">SEO Details</Button>
+                      </Link>
+                    )}
+                  </div>
                 </CardContent>
               </Card>
             </div>

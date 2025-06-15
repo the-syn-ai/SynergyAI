@@ -20,13 +20,13 @@ export default function Navbar() {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm border-b">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border/50 shadow-sm">
       <div className="container mx-auto px-4">
         {/* Logo Row - Always at the top */}
         <div className="flex justify-center items-center py-4">
           <button 
             onClick={handleLogoClick}
-            className="text-3xl md:text-4xl font-bold hover:text-primary transition-colors"
+            className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary via-blue-500 to-purple-600 bg-clip-text text-transparent hover:scale-105 transition-transform duration-200"
           >
             SynergyAI
           </button>

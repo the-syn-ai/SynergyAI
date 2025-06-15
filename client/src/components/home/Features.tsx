@@ -70,7 +70,7 @@ export default function Features() {
           direction="up"
           duration="normal"
         >
-          <h2 className="text-3xl font-bold mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-primary via-blue-500 to-purple-600 bg-clip-text text-transparent">
             <AnimatedUnderline 
               underlineColor="bg-primary/60" 
               underlineHeight={3} 
@@ -78,11 +78,11 @@ export default function Features() {
               duration="slow"
               className="px-2"
             >
-              Our Services
+              Why Choose SynergyAI
             </AnimatedUnderline>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Comprehensive AI-powered solutions designed to transform your business operations and drive growth through automation
+          <p className="text-xl md:text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
+            Comprehensive AI-powered solutions designed to transform your business operations and drive sustainable growth through intelligent automation
           </p>
         </FadeInText>
 
