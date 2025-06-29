@@ -1,0 +1,48 @@
+{
+  "performance": {
+    "score": 85,
+    "metrics": {
+      "fcp": "1.2s",
+      "lcp": "2.1s",
+      "cls": "0.05",
+      "fid": "45ms"
+    }
+  },
+  "seo": {
+    "score": 92,
+    "issues": [
+      "Consider adding more internal links"
+    ],
+    "recommendations": [
+      "Add schema markup",
+      "Optimize meta descriptions"
+    ]
+  },
+  "accessibility": {
+    "score": 88,
+    "issues": [
+      "Some images missing alt text"
+    ],
+    "recommendations": [
+      "Add ARIA labels",
+      "Improve color contrast"
+    ]
+  },
+  "security": {
+    "score": 78,
+    "headers": {},
+    "issues": [
+      "Missing security headers"
+    ],
+    "recommendations": [
+      "Add CSP headers",
+      "Implement HSTS"
+    ]
+  },
+  "suggestions": [
+    "Optimize images for better performance",
+    "Add structured data markup",
+    "Improve mobile responsiveness"
+  ],
+  "summary": "Good performance overall. Focus on security and accessibility improvements."
+}
